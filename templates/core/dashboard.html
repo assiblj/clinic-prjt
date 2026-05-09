@@ -1,63 +1,100 @@
 {% extends 'base.html' %}
-{% block title %}Tableau de Bord{% endblock %}
-{% block page_title %}<i class="fas fa-tachometer-alt me-2"></i>Tableau de Bord{% endblock %}
+{% block title %}Tableau de Bord — MedixCare Pro{% endblock %}
+{% block page_title %}<i class="fas fa-chart-pie"></i> Tableau de Bord{% endblock %}
 
 {% block content %}
+<!-- Welcome Banner -->
+<div class="glass-card mb-4" style="background:linear-gradient(135deg, rgba(14,165,233,0.15) 0%, rgba(6,182,212,0.1) 100%); border-color:rgba(14,165,233,0.2);">
+    <div class="card-body py-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 style="color:var(--text-primary); font-weight:700; margin-bottom:6px;">
+                    Bienvenue, {{ user.first_name }} !
+                </h4>
+                <p style="color:var(--text-muted); margin:0; font-size:14px;">
+                    Voici un apercu de votre clinique aujourd&apos;hui
+                </p>
+            </div>
+            <div class="d-none d-md-block">
+                <div style="display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:13px;">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>{{ today|date:"l, d F Y"|default:"Aujourd'hui" }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Stats Cards -->
 <div class="row g-4 mb-4">
-    <div class="col-md-3">
-        <div class="stat-card" style="background:linear-gradient(135deg,#1a5276,#2e86c1);">
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card" style="--stat-color:#0ea5e9; --stat-rgb:14,165,233;">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="small opacity-75 mb-1">Total Patients</div>
-                    <h3 class="mb-0">{{ total_patients }}</h3>
+                    <div class="stat-label">Total Patients</div>
+                    <div class="stat-value">{{ total_patients }}</div>
+                    <div class="stat-change">
+                        <i class="fas fa-folder-open" style="color:var(--primary);"></i>
+                        <span>Dossiers actifs</span>
+                    </div>
                 </div>
-                <i class="fas fa-users icon"></i>
-            </div>
-            <div class="mt-2" style="font-size:12px;opacity:0.7;">
-                <i class="fas fa-arrow-up me-1"></i>Dossiers actifs
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card" style="background:linear-gradient(135deg,#117a65,#1abc9c);">
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card" style="--stat-color:#10b981; --stat-rgb:16,185,129;">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="small opacity-75 mb-1">RDV Aujourd'hui</div>
-                    <h3 class="mb-0">0</h3>
+                    <div class="stat-label">RDV Aujourd&apos;hui</div>
+                    <div class="stat-value">0</div>
+                    <div class="stat-change">
+                        <i class="fas fa-clock" style="color:var(--success);"></i>
+                        <span>En attente</span>
+                    </div>
                 </div>
-                <i class="fas fa-calendar-check icon"></i>
-            </div>
-            <div class="mt-2" style="font-size:12px;opacity:0.7;">
-                <i class="fas fa-clock me-1"></i>En attente
+                <div class="stat-icon" style="background:linear-gradient(135deg, rgba(16,185,129,0.2) 0%, rgba(16,185,129,0.05) 100%); color:#10b981;">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card" style="background:linear-gradient(135deg,#7d6608,#f1c40f);">
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card" style="--stat-color:#f59e0b; --stat-rgb:245,158,11;">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="small opacity-75 mb-1">Consultations</div>
-                    <h3 class="mb-0">0</h3>
+                    <div class="stat-label">Consultations</div>
+                    <div class="stat-value">0</div>
+                    <div class="stat-change">
+                        <i class="fas fa-calendar" style="color:var(--warning);"></i>
+                        <span>Ce mois</span>
+                    </div>
                 </div>
-                <i class="fas fa-stethoscope icon"></i>
-            </div>
-            <div class="mt-2" style="font-size:12px;opacity:0.7;">
-                <i class="fas fa-calendar me-1"></i>Ce mois
+                <div class="stat-icon" style="background:linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(245,158,11,0.05) 100%); color:#f59e0b;">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card" style="background:linear-gradient(135deg,#78281f,#e74c3c);">
+
+    <div class="col-md-6 col-lg-3">
+        <div class="stat-card" style="--stat-color:#ef4444; --stat-rgb:239,68,68;">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="small opacity-75 mb-1">Recettes</div>
-                    <h3 class="mb-0">0 MAD</h3>
+                    <div class="stat-label">Recettes</div>
+                    <div class="stat-value">0 <span style="font-size:14px; font-weight:500;">MAD</span></div>
+                    <div class="stat-change">
+                        <i class="fas fa-chart-line" style="color:var(--danger);"></i>
+                        <span>Ce mois</span>
+                    </div>
                 </div>
-                <i class="fas fa-money-bill icon"></i>
-            </div>
-            <div class="mt-2" style="font-size:12px;opacity:0.7;">
-                <i class="fas fa-chart-line me-1"></i>Ce mois
+                <div class="stat-icon" style="background:linear-gradient(135deg, rgba(239,68,68,0.2) 0%, rgba(239,68,68,0.05) 100%); color:#ef4444;">
+                    <i class="fas fa-coins"></i>
+                </div>
             </div>
         </div>
     </div>
@@ -65,53 +102,55 @@
 
 <!-- Recent Patients + Quick Actions -->
 <div class="row g-4">
-    <!-- Derniers patients -->
+    <!-- Recent Patients -->
     <div class="col-lg-8">
-        <div class="card h-100">
-            <div class="card-header d-flex justify-content-between align-items-center py-3"
-                 style="background:#f8fbff;">
-                <h6 class="mb-0 fw-bold" style="color:#1a5276;">
-                    <i class="fas fa-user-clock me-2"></i>Derniers patients enregistrés
-                </h6>
-                <a href="{% url 'patients:list' %}" class="btn btn-sm btn-outline-primary">Voir tous</a>
+        <div class="glass-card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6><i class="fas fa-user-clock"></i> Derniers patients enregistres</h6>
+                <a href="{% url 'patients:list' %}" class="btn btn-outline-primary btn-sm">
+                    Voir tous
+                </a>
             </div>
             <div class="card-body p-0">
-                <table class="table table-hover mb-0">
+                <table class="modern-table">
                     <thead>
                         <tr>
-                            <th>N° Dossier</th>
+                            <th>N Dossier</th>
                             <th>Nom complet</th>
-                            <th>Âge</th>
-                            <th>Téléphone</th>
-                            <th></th>
+                            <th>Age</th>
+                            <th>Telephone</th>
+                            <th style="width:60px;"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for p in recent_patients %}
                         <tr>
-                            <td><span class="badge bg-primary">{{ p.file_number }}</span></td>
                             <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="avatar" style="width:30px;height:30px;font-size:11px;">
+                                <span class="badge badge-primary">{{ p.file_number }}</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar avatar-sm">
                                         {{ p.first_name|first|upper }}{{ p.last_name|first|upper }}
                                     </div>
-                                    {{ p.full_name }}
+                                    <span style="color:var(--text-primary); font-weight:500;">{{ p.full_name }}</span>
                                 </div>
                             </td>
                             <td>{{ p.age }} ans</td>
-                            <td>{{ p.phone }}</td>
+                            <td style="color:var(--text-muted);">{{ p.phone }}</td>
                             <td>
-                                <a href="{% url 'patients:detail' p.pk %}"
-                                   class="btn btn-sm btn-outline-primary">
+                                <a href="{% url 'patients:detail' p.pk %}" class="btn btn-outline-primary btn-icon btn-sm" title="Voir">
                                     <i class="fas fa-eye"></i>
                                 </a>
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" class="text-center text-muted py-4">
-                                <i class="fas fa-user-slash fa-2x mb-2 d-block opacity-25"></i>
-                                Aucun patient enregistré
+                            <td colspan="5" style="text-align:center; padding:48px 20px;">
+                                <div style="color:var(--text-muted);">
+                                    <i class="fas fa-user-slash fa-3x mb-3 d-block" style="opacity:0.3;"></i>
+                                    <p style="margin:0;">Aucun patient enregistre</p>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
@@ -121,28 +160,29 @@
         </div>
     </div>
 
-    <!-- Actions rapides -->
+    <!-- Quick Actions -->
     <div class="col-lg-4">
-        <div class="card h-100">
-            <div class="card-header py-3" style="background:#f8fbff;">
-                <h6 class="mb-0 fw-bold" style="color:#1a5276;">
-                    <i class="fas fa-bolt me-2"></i>Actions rapides
-                </h6>
+        <div class="glass-card h-100">
+            <div class="card-header">
+                <h6><i class="fas fa-bolt"></i> Actions rapides</h6>
             </div>
-            <div class="card-body d-flex flex-column gap-3 pt-4">
-                <a href="{% url 'patients:create' %}" class="btn btn-primary py-3">
-                    <i class="fas fa-user-plus me-2"></i>Nouveau Patient
+            <div class="card-body d-flex flex-column gap-3">
+                <a href="{% url 'patients:create' %}" class="btn btn-primary py-3" style="font-size:15px;">
+                    <i class="fas fa-user-plus"></i> Nouveau Patient
                 </a>
-                <a href="{% url 'patients:list' %}" class="btn btn-outline-primary py-3">
-                    <i class="fas fa-search me-2"></i>Rechercher Patient
+                <a href="{% url 'appointments:create' %}" class="btn btn-success py-3" style="font-size:15px;">
+                    <i class="fas fa-calendar-plus"></i> Nouveau RDV
+                </a>
+                <a href="{% url 'patients:list' %}" class="btn btn-outline-primary py-3" style="font-size:15px;">
+                    <i class="fas fa-search"></i> Rechercher Patient
                 </a>
                 {% if user.is_admin or user.is_staff %}
-                <a href="{% url 'accounts:user_create' %}" class="btn btn-outline-secondary py-3">
-                    <i class="fas fa-user-cog me-2"></i>Créer Utilisateur
+                <a href="{% url 'accounts:user_create' %}" class="btn btn-outline-secondary py-3" style="font-size:15px;">
+                    <i class="fas fa-user-cog"></i> Creer Utilisateur
                 </a>
                 {% endif %}
-                <a href="/admin/" class="btn btn-outline-dark py-3">
-                    <i class="fas fa-cogs me-2"></i>Admin Django
+                <a href="/admin/" class="btn btn-outline-secondary py-3" style="font-size:15px;">
+                    <i class="fas fa-cogs"></i> Admin Django
                 </a>
             </div>
         </div>

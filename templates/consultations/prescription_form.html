@@ -1,30 +1,31 @@
 {% extends 'base.html' %}
-{% block title %}Ordonnance{% endblock %}
-{% block page_title %}<i class="fas fa-prescription me-2"></i>Ordonnance{% endblock %}
+{% block title %}Ordonnance — MedixCare Pro{% endblock %}
+{% block page_title %}<i class="fas fa-prescription"></i> Ordonnance{% endblock %}
+
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-9">
-        <div class="alert alert-info py-2 small mb-3">
+        <div class="alert alert-info mb-4" style="padding:14px 18px;">
             <i class="fas fa-user me-2"></i>Patient : <strong>{{ consultation.patient.full_name }}</strong> —
             Consultation du {{ consultation.date|date:"d/m/Y" }}
         </div>
-        <div class="card">
-            <div class="card-header py-3" style="background:linear-gradient(135deg,#117a65,#1abc9c);">
-                <h5 class="text-white mb-0"><i class="fas fa-prescription me-2"></i>Médicaments prescrits</h5>
+        <div class="glass-card">
+            <div class="card-header" style="background:linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(6,182,212,0.1) 100%);">
+                <h6 style="font-size:16px;"><i class="fas fa-prescription" style="color:var(--success);"></i> Medicaments prescrits</h6>
             </div>
             <div class="card-body p-4">
                 <form method="post">
                     {% csrf_token %}
                     {{ formset.management_form }}
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-primary">
-                                <tr>
-                                    <th>Médicament</th>
-                                    <th>Dosage</th>
-                                    <th>Fréquence</th>
-                                    <th>Durée</th>
-                                    <th>Instructions</th>
+                        <table class="modern-table" style="border:1px solid var(--border-glass); border-radius:12px; overflow:hidden;">
+                            <thead>
+                                <tr style="background:rgba(14,165,233,0.1);">
+                                    <th style="color:var(--primary);">Medicament</th>
+                                    <th style="color:var(--primary);">Dosage</th>
+                                    <th style="color:var(--primary);">Frequence</th>
+                                    <th style="color:var(--primary);">Duree</th>
+                                    <th style="color:var(--primary);">Instructions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -40,8 +41,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-3 d-flex gap-2">
-                        <button type="submit" class="btn btn-success px-4"><i class="fas fa-save me-2"></i>Enregistrer l'ordonnance</button>
+                    <div class="mt-4 pt-3 border-top d-flex gap-3">
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="fas fa-save"></i> Enregistrer l&apos;ordonnance
+                        </button>
                         <a href="{% url 'consultations:detail' consultation.pk %}" class="btn btn-outline-secondary px-4">Annuler</a>
                     </div>
                 </form>

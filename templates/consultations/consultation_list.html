@@ -1,54 +1,78 @@
 {% extends 'base.html' %}
-{% block title %}Consultations{% endblock %}
-{% block page_title %}<i class="fas fa-stethoscope me-2"></i>Consultations{% endblock %}
+{% block title %}Consultations — MedixCare Pro{% endblock %}
+{% block page_title %}<i class="fas fa-stethoscope"></i> Consultations{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="mb-0 text-muted">{{ consultations.count }} consultation(s)</h5>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h5 style="color:var(--text-primary); font-weight:600; margin:0;">Gestion des consultations</h5>
+        <p style="color:var(--text-muted); font-size:13px; margin:4px 0 0;">{{ consultations.count }} consultation(s)</p>
+    </div>
     <a href="{% url 'consultations:create' %}" class="btn btn-primary">
-        <i class="fas fa-plus me-2"></i>Nouvelle consultation
+        <i class="fas fa-plus"></i> Nouvelle consultation
     </a>
 </div>
-<div class="card">
+
+<div class="glass-card">
     <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-            <thead>
-                <tr><th>Date</th><th>Patient</th><th>Médecin</th><th>Diagnostic</th><th>Suivi</th><th class="text-center">Actions</th></tr>
-            </thead>
-            <tbody>
-                {% for c in consultations %}
-                <tr>
-                    <td>
-                        <div class="fw-semibold small">{{ c.date|date:"d/m/Y" }}</div>
-                        <div class="text-muted" style="font-size:11px;">{{ c.date|date:"H:i" }}</div>
-                    </td>
-                    <td>
-                        <div class="fw-semibold small">{{ c.patient.full_name }}</div>
-                        <div class="text-muted" style="font-size:11px;">{{ c.patient.file_number }}</div>
-                    </td>
-                    <td class="small">{{ c.doctor.full_name }}</td>
-                    <td class="small">{{ c.diagnosis|truncatechars:40 }}</td>
-                    <td class="small">
-                        {% if c.follow_up_date %}
-                        <span class="badge bg-warning text-dark">{{ c.follow_up_date|date:"d/m/Y" }}</span>
-                        {% else %}—{% endif %}
-                    </td>
-                    <td class="text-center">
-                        <a href="{% url 'consultations:detail' c.pk %}" class="btn btn-sm btn-outline-primary me-1">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <a href="{% url 'consultations:prescription_add' c.pk %}" class="btn btn-sm btn-outline-success me-1" title="Ordonnance">
-                            <i class="fas fa-prescription"></i>
-                        </a>
-                        <a href="{% url 'consultations:lab_add' c.pk %}" class="btn btn-sm btn-outline-info" title="Examen">
-                            <i class="fas fa-flask"></i>
-                        </a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="6" class="text-center text-muted py-4">Aucune consultation enregistrée</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Patient</th>
+                        <th>Medecin</th>
+                        <th>Diagnostic</th>
+                        <th>Suivi</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in consultations %}
+                    <tr>
+                        <td>
+                            <div style="color:var(--text-primary); font-weight:500; font-size:13px;">{{ c.date|date:"d/m/Y" }}</div>
+                            <div style="color:var(--text-muted); font-size:11px;">{{ c.date|date:"H:i" }}</div>
+                        </td>
+                        <td>
+                            <div style="color:var(--text-primary); font-weight:500; font-size:13px;">{{ c.patient.full_name }}</div>
+                            <div style="color:var(--text-muted); font-size:11px;">{{ c.patient.file_number }}</div>
+                        </td>
+                        <td style="font-size:13px;">{{ c.doctor.full_name }}</td>
+                        <td style="font-size:13px; color:var(--text-muted);">{{ c.diagnosis|truncatechars:40 }}</td>
+                        <td>
+                            {% if c.follow_up_date %}
+                            <span class="badge badge-warning">{{ c.follow_up_date|date:"d/m/Y" }}</span>
+                            {% else %}—{% endif %}
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex gap-1 justify-content-center">
+                                <a href="{% url 'consultations:detail' c.pk %}" class="btn btn-outline-primary btn-icon btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'consultations:prescription_add' c.pk %}" class="btn btn-outline-success btn-icon btn-sm" title="Ordonnance">
+                                    <i class="fas fa-prescription"></i>
+                                </a>
+                                <a href="{% url 'consultations:lab_add' c.pk %}" class="btn btn-outline-info btn-icon btn-sm" title="Examen">
+                                    <i class="fas fa-flask"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding:60px 20px; color:var(--text-muted);">
+                            <i class="fas fa-stethoscope fa-3x mb-3 d-block" style="opacity:0.3;"></i>
+                            <p style="margin-bottom:16px;">Aucune consultation enregistree</p>
+                            <a href="{% url 'consultations:create' %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i> Ajouter une consultation
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -1,109 +1,109 @@
 {% extends 'base.html' %}
-{% block title %}{{ title }}{% endblock %}
-{% block page_title %}<i class="fas fa-user-edit me-2"></i>{{ title }}{% endblock %}
+{% block title %}{{ title }} — MedixCare Pro{% endblock %}
+{% block page_title %}<i class="fas fa-user-edit"></i> {{ title }}{% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header py-3" style="background:linear-gradient(135deg,#1a5276,#2e86c1);">
-        <h5 class="text-white mb-0"><i class="fas fa-user-plus me-2"></i>{{ title }}</h5>
+<div class="glass-card">
+    <div class="card-header" style="background:linear-gradient(135deg, rgba(14,165,233,0.15) 0%, rgba(6,182,212,0.1) 100%);">
+        <h6 style="font-size:16px;"><i class="fas fa-user-plus"></i> {{ title }}</h6>
     </div>
     <div class="card-body p-4">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <!-- Infos personnelles -->
-            <h6 class="fw-bold mb-3 pb-2 border-bottom" style="color:#1a5276;">
-                <i class="fas fa-id-card me-2"></i>Informations personnelles
-            </h6>
+            <!-- Personal Info -->
+            <div style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:10px;">
+                <i class="fas fa-id-card"></i> Informations personnelles
+            </div>
             <div class="row g-3 mb-4">
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Prénom <span class="text-danger">*</span></label>
+                    <label class="form-label">Prenom <span style="color:var(--danger);">*</span></label>
                     {{ form.first_name }}
-                    {% if form.first_name.errors %}<div class="text-danger small">{{ form.first_name.errors.0 }}</div>{% endif %}
+                    {% if form.first_name.errors %}<div style="color:var(--danger); font-size:12px; margin-top:4px;">{{ form.first_name.errors.0 }}</div>{% endif %}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Nom <span class="text-danger">*</span></label>
+                    <label class="form-label">Nom <span style="color:var(--danger);">*</span></label>
                     {{ form.last_name }}
-                    {% if form.last_name.errors %}<div class="text-danger small">{{ form.last_name.errors.0 }}</div>{% endif %}
+                    {% if form.last_name.errors %}<div style="color:var(--danger); font-size:12px; margin-top:4px;">{{ form.last_name.errors.0 }}</div>{% endif %}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Date de naissance <span class="text-danger">*</span></label>
+                    <label class="form-label">Date de naissance <span style="color:var(--danger);">*</span></label>
                     {{ form.date_of_birth }}
-                    {% if form.date_of_birth.errors %}<div class="text-danger small">{{ form.date_of_birth.errors.0 }}</div>{% endif %}
+                    {% if form.date_of_birth.errors %}<div style="color:var(--danger); font-size:12px; margin-top:4px;">{{ form.date_of_birth.errors.0 }}</div>{% endif %}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Sexe <span class="text-danger">*</span></label>
+                    <label class="form-label">Sexe <span style="color:var(--danger);">*</span></label>
                     {{ form.gender }}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">CIN <span class="text-danger">*</span></label>
+                    <label class="form-label">CIN <span style="color:var(--danger);">*</span></label>
                     {{ form.cin }}
-                    {% if form.cin.errors %}<div class="text-danger small">{{ form.cin.errors.0 }}</div>{% endif %}
+                    {% if form.cin.errors %}<div style="color:var(--danger); font-size:12px; margin-top:4px;">{{ form.cin.errors.0 }}</div>{% endif %}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Groupe sanguin</label>
+                    <label class="form-label">Groupe sanguin</label>
                     {{ form.blood_group }}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Situation familiale</label>
+                    <label class="form-label">Situation familiale</label>
                     {{ form.marital_status }}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Photo</label>
+                    <label class="form-label">Photo</label>
                     {{ form.photo }}
                 </div>
             </div>
 
             <!-- Contact -->
-            <h6 class="fw-bold mb-3 pb-2 border-bottom" style="color:#1a5276;">
-                <i class="fas fa-phone me-2"></i>Contact
-            </h6>
+            <div style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:10px;">
+                <i class="fas fa-phone"></i> Contact
+            </div>
             <div class="row g-3 mb-4">
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Téléphone <span class="text-danger">*</span></label>
+                    <label class="form-label">Telephone <span style="color:var(--danger);">*</span></label>
                     {{ form.phone }}
-                    {% if form.phone.errors %}<div class="text-danger small">{{ form.phone.errors.0 }}</div>{% endif %}
+                    {% if form.phone.errors %}<div style="color:var(--danger); font-size:12px; margin-top:4px;">{{ form.phone.errors.0 }}</div>{% endif %}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Tél. secondaire</label>
+                    <label class="form-label">Tel. secondaire</label>
                     {{ form.phone_alt }}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Email</label>
+                    <label class="form-label">Email</label>
                     {{ form.email }}
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-semibold small">Ville</label>
+                    <label class="form-label">Ville</label>
                     {{ form.city }}
                 </div>
                 <div class="col-12">
-                    <label class="form-label fw-semibold small">Adresse</label>
+                    <label class="form-label">Adresse</label>
                     {{ form.address }}
                 </div>
             </div>
 
-            <!-- Assurance -->
-            <h6 class="fw-bold mb-3 pb-2 border-bottom" style="color:#1a5276;">
-                <i class="fas fa-shield-alt me-2"></i>Assurance
-            </h6>
+            <!-- Insurance -->
+            <div style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:10px;">
+                <i class="fas fa-shield-alt"></i> Assurance
+            </div>
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold small">Nom de l'assurance</label>
+                    <label class="form-label">Nom de l&apos;assurance</label>
                     {{ form.insurance_name }}
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold small">N° Assurance</label>
+                    <label class="form-label">N Assurance</label>
                     {{ form.insurance_number }}
                 </div>
             </div>
 
-            <!-- Boutons -->
-            <div class="d-flex gap-2 mt-4 pt-3 border-top">
+            <!-- Buttons -->
+            <div class="d-flex gap-3 mt-4 pt-4 border-top">
                 <button type="submit" class="btn btn-primary px-5 py-2">
-                    <i class="fas fa-save me-2"></i>Enregistrer
+                    <i class="fas fa-save"></i> Enregistrer
                 </button>
                 <a href="{% url 'patients:list' %}" class="btn btn-outline-secondary px-4 py-2">
-                    <i class="fas fa-times me-2"></i>Annuler
+                    <i class="fas fa-times"></i> Annuler
                 </a>
             </div>
         </form>
