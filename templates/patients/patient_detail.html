@@ -1,44 +1,50 @@
 {% extends 'base.html' %}
-{% block title %}{{ patient.full_name }}{% endblock %}
-{% block page_title %}<i class="fas fa-user me-2"></i>Dossier Patient{% endblock %}
+{% block title %}{{ patient.full_name }} — MedixCare Pro{% endblock %}
+{% block page_title %}<i class="fas fa-user"></i> Dossier Patient{% endblock %}
 
 {% block content %}
 <!-- Header patient -->
-<div class="card mb-4" style="border-left:5px solid #1a5276;">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center gap-3">
+<div class="glass-card mb-4" style="border-left:4px solid var(--primary);">
+    <div class="card-body py-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div class="d-flex align-items-center gap-4">
                 {% if patient.photo %}
-                <img src="{{ patient.photo.url }}" width="70" height="70"
-                     class="rounded-circle object-fit-cover border border-3 border-primary">
+                <img src="{{ patient.photo.url }}" width="80" height="80"
+                     style="border-radius:18px; object-fit:cover; border:3px solid var(--primary); box-shadow:0 8px 25px rgba(14,165,233,0.3);">
                 {% else %}
-                <div class="avatar" style="width:70px;height:70px;font-size:24px;background:linear-gradient(135deg,#1a5276,#2e86c1);">
+                <div class="avatar avatar-xl" style="box-shadow:0 8px 25px rgba(14,165,233,0.3);">
                     {{ patient.first_name|first|upper }}{{ patient.last_name|first|upper }}
                 </div>
                 {% endif %}
                 <div>
-                    <h4 class="mb-1 fw-bold">{{ patient.full_name }}</h4>
+                    <h4 style="color:var(--text-primary); font-weight:700; margin-bottom:10px;">{{ patient.full_name }}</h4>
                     <div class="d-flex gap-2 flex-wrap">
-                        <span class="badge bg-primary fs-6">{{ patient.file_number }}</span>
-                        <span class="badge bg-secondary">{{ patient.age }} ans</span>
+                        <span class="badge badge-primary" style="font-size:12px; padding:6px 12px;">{{ patient.file_number }}</span>
+                        <span class="badge badge-secondary" style="font-size:12px; padding:6px 12px;">{{ patient.age }} ans</span>
                         {% if patient.blood_group %}
-                        <span class="badge bg-danger">{{ patient.blood_group }}</span>
+                        <span class="badge badge-danger" style="font-size:12px; padding:6px 12px;">{{ patient.blood_group }}</span>
                         {% endif %}
-                        {% if patient.gender == 'M' %}<span class="badge bg-info">Masculin</span>
-                        {% elif patient.gender == 'F' %}<span class="badge bg-pink text-white" style="background:#e91e63 !important;">Féminin</span>
+                        {% if patient.gender == 'M' %}
+                        <span class="badge badge-info" style="font-size:12px; padding:6px 12px;">
+                            <i class="fas fa-mars"></i> Masculin
+                        </span>
+                        {% elif patient.gender == 'F' %}
+                        <span class="badge" style="background:rgba(236,72,153,0.15); color:#f472b6; border:1px solid rgba(236,72,153,0.3); font-size:12px; padding:6px 12px;">
+                            <i class="fas fa-venus"></i> Feminin
+                        </span>
                         {% endif %}
                     </div>
                 </div>
             </div>
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 flex-wrap">
                 <a href="{% url 'patients:edit' patient.pk %}" class="btn btn-warning">
-                    <i class="fas fa-edit me-1"></i>Modifier
+                    <i class="fas fa-edit"></i> Modifier
                 </a>
                 <a href="{% url 'patients:vitals_add' patient.pk %}" class="btn btn-success">
-                    <i class="fas fa-heartbeat me-1"></i>Constantes
+                    <i class="fas fa-heartbeat"></i> Constantes
                 </a>
                 <a href="{% url 'patients:list' %}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Retour
+                    <i class="fas fa-arrow-left"></i> Retour
                 </a>
             </div>
         </div>
@@ -46,154 +52,157 @@
 </div>
 
 <div class="row g-4">
-    <!-- Infos personnelles -->
+    <!-- Personal Info -->
     <div class="col-lg-6">
-        <div class="card h-100">
-            <div class="card-header py-3" style="background:#f8fbff;">
-                <h6 class="mb-0 fw-bold" style="color:#1a5276;">
-                    <i class="fas fa-id-card me-2"></i>Informations personnelles
-                </h6>
+        <div class="glass-card h-100">
+            <div class="card-header">
+                <h6><i class="fas fa-id-card"></i> Informations personnelles</h6>
             </div>
             <div class="card-body">
-                <table class="table table-sm table-borderless mb-0">
+                <table class="table table-borderless mb-0" style="color:var(--text-secondary);">
                     <tr>
-                        <td class="text-muted fw-semibold" style="width:40%">CIN</td>
-                        <td>{{ patient.cin }}</td>
+                        <td style="width:40%; color:var(--text-muted); font-weight:500; padding:10px 0;">CIN</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.cin }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted fw-semibold">Date de naissance</td>
-                        <td>{{ patient.date_of_birth|date:"d/m/Y" }}</td>
+                        <td style="color:var(--text-muted); font-weight:500; padding:10px 0;">Date de naissance</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.date_of_birth|date:"d/m/Y" }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted fw-semibold">Situation familiale</td>
-                        <td>{{ patient.get_marital_status_display|default:"—" }}</td>
+                        <td style="color:var(--text-muted); font-weight:500; padding:10px 0;">Situation familiale</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.get_marital_status_display|default:"—" }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted fw-semibold">Téléphone</td>
-                        <td>{{ patient.phone }}</td>
+                        <td style="color:var(--text-muted); font-weight:500; padding:10px 0;">Telephone</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.phone }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted fw-semibold">Tél. secondaire</td>
-                        <td>{{ patient.phone_alt|default:"—" }}</td>
+                        <td style="color:var(--text-muted); font-weight:500; padding:10px 0;">Tel. secondaire</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.phone_alt|default:"—" }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted fw-semibold">Email</td>
-                        <td>{{ patient.email|default:"—" }}</td>
+                        <td style="color:var(--text-muted); font-weight:500; padding:10px 0;">Email</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.email|default:"—" }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted fw-semibold">Adresse</td>
-                        <td>{{ patient.address|default:"—" }}</td>
+                        <td style="color:var(--text-muted); font-weight:500; padding:10px 0;">Adresse</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.address|default:"—" }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted fw-semibold">Ville</td>
-                        <td>{{ patient.city|default:"—" }}</td>
+                        <td style="color:var(--text-muted); font-weight:500; padding:10px 0;">Ville</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.city|default:"—" }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted fw-semibold">Assurance</td>
-                        <td>{{ patient.insurance_name|default:"—" }}</td>
+                        <td style="color:var(--text-muted); font-weight:500; padding:10px 0;">Assurance</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.insurance_name|default:"—" }}</td>
                     </tr>
                     <tr>
-                        <td class="text-muted fw-semibold">N° Assurance</td>
-                        <td>{{ patient.insurance_number|default:"—" }}</td>
+                        <td style="color:var(--text-muted); font-weight:500; padding:10px 0;">N Assurance</td>
+                        <td style="padding:10px 0; color:var(--text-primary);">{{ patient.insurance_number|default:"—" }}</td>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Dossier médical -->
+    <!-- Medical Record -->
     <div class="col-lg-6">
-        <div class="card h-100">
-            <div class="card-header py-3 d-flex justify-content-between" style="background:#f8fbff;">
-                <h6 class="mb-0 fw-bold" style="color:#1a5276;">
-                    <i class="fas fa-notes-medical me-2"></i>Dossier médical
-                </h6>
-                <a href="{% url 'patients:record_edit' patient.pk %}"
-                   class="btn btn-sm btn-outline-primary">
-                    <i class="fas fa-edit me-1"></i>Modifier
+        <div class="glass-card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6><i class="fas fa-notes-medical"></i> Dossier medical</h6>
+                <a href="{% url 'patients:record_edit' patient.pk %}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-edit"></i> Modifier
                 </a>
             </div>
             <div class="card-body">
-                <div class="mb-3">
-                    <div class="fw-semibold small text-danger mb-1">
-                        <i class="fas fa-exclamation-triangle me-1"></i>Allergies
+                <div class="mb-4">
+                    <div style="color:var(--danger); font-weight:600; font-size:13px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-exclamation-triangle"></i> Allergies
                     </div>
-                    <p class="small mb-0">{{ record.allergies|default:"Aucune allergie connue"|linebreaksbr }}</p>
+                    <p style="color:var(--text-secondary); font-size:14px; margin:0; padding:12px; background:rgba(239,68,68,0.1); border-radius:10px; border-left:3px solid var(--danger);">
+                        {{ record.allergies|default:"Aucune allergie connue"|linebreaksbr }}
+                    </p>
                 </div>
-                <hr>
-                <div class="mb-3">
-                    <div class="fw-semibold small text-warning mb-1">
-                        <i class="fas fa-heartbeat me-1"></i>Maladies chroniques
+
+                <div class="mb-4">
+                    <div style="color:var(--warning); font-weight:600; font-size:13px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-heartbeat"></i> Maladies chroniques
                     </div>
-                    <p class="small mb-0">{{ record.chronic_diseases|default:"Aucune"|linebreaksbr }}</p>
+                    <p style="color:var(--text-secondary); font-size:14px; margin:0; padding:12px; background:rgba(245,158,11,0.1); border-radius:10px; border-left:3px solid var(--warning);">
+                        {{ record.chronic_diseases|default:"Aucune"|linebreaksbr }}
+                    </p>
                 </div>
-                <hr>
-                <div class="mb-3">
-                    <div class="fw-semibold small text-info mb-1">
-                        <i class="fas fa-procedures me-1"></i>Antécédents chirurgicaux
+
+                <div class="mb-4">
+                    <div style="color:var(--info); font-weight:600; font-size:13px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-procedures"></i> Antecedents chirurgicaux
                     </div>
-                    <p class="small mb-0">{{ record.past_surgeries|default:"Aucun"|linebreaksbr }}</p>
+                    <p style="color:var(--text-secondary); font-size:14px; margin:0; padding:12px; background:rgba(6,182,212,0.1); border-radius:10px; border-left:3px solid var(--info);">
+                        {{ record.past_surgeries|default:"Aucun"|linebreaksbr }}
+                    </p>
                 </div>
-                <hr>
+
                 <div>
-                    <div class="fw-semibold small text-success mb-1">
-                        <i class="fas fa-pills me-1"></i>Médicaments en cours
+                    <div style="color:var(--success); font-weight:600; font-size:13px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-pills"></i> Medicaments en cours
                     </div>
-                    <p class="small mb-0">{{ record.current_medications|default:"Aucun"|linebreaksbr }}</p>
+                    <p style="color:var(--text-secondary); font-size:14px; margin:0; padding:12px; background:rgba(16,185,129,0.1); border-radius:10px; border-left:3px solid var(--success);">
+                        {{ record.current_medications|default:"Aucun"|linebreaksbr }}
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Constantes vitales -->
+    <!-- Vital Signs -->
     <div class="col-12">
-        <div class="card">
-            <div class="card-header py-3 d-flex justify-content-between" style="background:#f8fbff;">
-                <h6 class="mb-0 fw-bold" style="color:#1a5276;">
-                    <i class="fas fa-heartbeat me-2"></i>Dernières constantes vitales
-                </h6>
-                <a href="{% url 'patients:vitals_add' patient.pk %}"
-                   class="btn btn-sm btn-success">
-                    <i class="fas fa-plus me-1"></i>Ajouter
+        <div class="glass-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6><i class="fas fa-heartbeat"></i> Dernieres constantes vitales</h6>
+                <a href="{% url 'patients:vitals_add' patient.pk %}" class="btn btn-success btn-sm">
+                    <i class="fas fa-plus"></i> Ajouter
                 </a>
             </div>
             <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Poids</th>
-                            <th>Taille</th>
-                            <th>IMC</th>
-                            <th>Tension</th>
-                            <th>Température</th>
-                            <th>Fréq. card.</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for v in vitals %}
-                        <tr>
-                            <td class="small">{{ v.measured_at|date:"d/m/Y H:i" }}</td>
-                            <td>{% if v.weight %}{{ v.weight }} kg{% else %}—{% endif %}</td>
-                            <td>{% if v.height %}{{ v.height }} cm{% else %}—{% endif %}</td>
-                            <td>{% if v.bmi %}<span class="badge bg-info">{{ v.bmi }}</span>{% else %}—{% endif %}</td>
-                            <td>
-                                {% if v.blood_pressure_sys %}
-                                {{ v.blood_pressure_sys }}/{{ v.blood_pressure_dia }} mmHg
-                                {% else %}—{% endif %}
-                            </td>
-                            <td>{% if v.temperature %}{{ v.temperature }}°C{% else %}—{% endif %}</td>
-                            <td>{% if v.heart_rate %}{{ v.heart_rate }} bpm{% else %}—{% endif %}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="7" class="text-center text-muted py-3">
-                                Aucune constante enregistrée
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Poids</th>
+                                <th>Taille</th>
+                                <th>IMC</th>
+                                <th>Tension</th>
+                                <th>Temperature</th>
+                                <th>Freq. card.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for v in vitals %}
+                            <tr>
+                                <td style="color:var(--text-muted); font-size:13px;">{{ v.measured_at|date:"d/m/Y H:i" }}</td>
+                                <td>{% if v.weight %}<span style="color:var(--text-primary);">{{ v.weight }}</span> kg{% else %}—{% endif %}</td>
+                                <td>{% if v.height %}<span style="color:var(--text-primary);">{{ v.height }}</span> cm{% else %}—{% endif %}</td>
+                                <td>{% if v.bmi %}<span class="badge badge-info">{{ v.bmi }}</span>{% else %}—{% endif %}</td>
+                                <td>
+                                    {% if v.blood_pressure_sys %}
+                                    <span style="color:var(--text-primary);">{{ v.blood_pressure_sys }}/{{ v.blood_pressure_dia }}</span> mmHg
+                                    {% else %}—{% endif %}
+                                </td>
+                                <td>{% if v.temperature %}<span style="color:var(--text-primary);">{{ v.temperature }}</span>°C{% else %}—{% endif %}</td>
+                                <td>{% if v.heart_rate %}<span style="color:var(--text-primary);">{{ v.heart_rate }}</span> bpm{% else %}—{% endif %}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:40px 20px; color:var(--text-muted);">
+                                    <i class="fas fa-heartbeat fa-2x mb-3 d-block" style="opacity:0.3;"></i>
+                                    Aucune constante enregistree
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

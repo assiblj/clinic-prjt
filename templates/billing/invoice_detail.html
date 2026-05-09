@@ -1,26 +1,30 @@
 {% extends 'base.html' %}
-{% block title %}Facture {{ invoice.invoice_number }}{% endblock %}
-{% block page_title %}<i class="fas fa-file-invoice me-2"></i>Facture {{ invoice.invoice_number }}{% endblock %}
+{% block title %}Facture {{ invoice.invoice_number }} — MedixCare Pro{% endblock %}
+{% block page_title %}<i class="fas fa-file-invoice"></i> Facture {{ invoice.invoice_number }}{% endblock %}
+
 {% block content %}
-<div class="card mb-4" style="border-left:5px solid #c0392b;">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
+<!-- Header -->
+<div class="glass-card mb-4" style="border-left:4px solid var(--danger);">
+    <div class="card-body py-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
-                <h5 class="fw-bold mb-1">{{ invoice.invoice_number }}</h5>
-                <span class="badge bg-primary">{{ invoice.patient.full_name }}</span>
-                <span class="badge bg-secondary ms-1">{{ invoice.created_at|date:"d/m/Y" }}</span>
-                {% if invoice.status == 'PAID' %}<span class="badge bg-success ms-1">Payée ✓</span>
-                {% elif invoice.status == 'PARTIAL' %}<span class="badge bg-warning text-dark ms-1">Partielle</span>
-                {% elif invoice.status == 'PENDING' %}<span class="badge bg-danger ms-1">En attente</span>{% endif %}
+                <h5 style="color:var(--text-primary); font-weight:700; margin-bottom:10px;">{{ invoice.invoice_number }}</h5>
+                <div class="d-flex gap-2 flex-wrap">
+                    <span class="badge badge-primary">{{ invoice.patient.full_name }}</span>
+                    <span class="badge badge-secondary">{{ invoice.created_at|date:"d/m/Y" }}</span>
+                    {% if invoice.status == 'PAID' %}<span class="badge badge-success">Payee</span>
+                    {% elif invoice.status == 'PARTIAL' %}<span class="badge badge-warning">Partielle</span>
+                    {% elif invoice.status == 'PENDING' %}<span class="badge badge-danger">En attente</span>{% endif %}
+                </div>
             </div>
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 flex-wrap">
                 {% if invoice.status != 'PAID' %}
                 <a href="{% url 'billing:payment_add' invoice.pk %}" class="btn btn-success btn-sm">
-                    <i class="fas fa-money-bill-wave me-1"></i>Ajouter paiement
+                    <i class="fas fa-money-bill-wave"></i> Ajouter paiement
                 </a>
                 {% endif %}
                 <a href="{% url 'billing:list' %}" class="btn btn-outline-secondary btn-sm">
-                    <i class="fas fa-arrow-left me-1"></i>Retour
+                    <i class="fas fa-arrow-left"></i> Retour
                 </a>
             </div>
         </div>
@@ -29,37 +33,49 @@
 
 <div class="row g-4">
     <div class="col-lg-8">
-        <div class="card mb-4">
-            <div class="card-header py-3" style="background:#f8fbff;">
-                <h6 class="mb-0 fw-bold" style="color:#1a5276;"><i class="fas fa-list me-2"></i>Lignes de facture</h6>
+        <!-- Invoice Lines -->
+        <div class="glass-card mb-4">
+            <div class="card-header">
+                <h6><i class="fas fa-list"></i> Lignes de facture</h6>
             </div>
             <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead><tr><th>Description</th><th class="text-center">Qté</th><th class="text-end">Prix unit.</th><th class="text-end">Total</th></tr></thead>
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-center">Qte</th>
+                            <th class="text-end">Prix unit.</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {% for item in items %}
                         <tr>
-                            <td>{{ item.description }}</td>
+                            <td style="color:var(--text-primary);">{{ item.description }}</td>
                             <td class="text-center">{{ item.quantity }}</td>
                             <td class="text-end">{{ item.unit_price }} MAD</td>
-                            <td class="text-end fw-bold">{{ item.total }} MAD</td>
+                            <td class="text-end" style="color:var(--text-primary); font-weight:600;">{{ item.total }} MAD</td>
                         </tr>
                         {% empty %}
-                        <tr><td colspan="4" class="text-center text-muted py-3">Aucune ligne de facture</td></tr>
+                        <tr>
+                            <td colspan="4" style="text-align:center; padding:32px 20px; color:var(--text-muted);">
+                                Aucune ligne de facture
+                            </td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                     <tfoot>
-                        <tr style="background:#f8fbff;">
-                            <td colspan="3" class="text-end fw-bold">Total</td>
-                            <td class="text-end fw-bold text-primary">{{ invoice.total_amount }} MAD</td>
+                        <tr style="background:var(--bg-glass);">
+                            <td colspan="3" class="text-end" style="font-weight:600; color:var(--text-primary);">Total</td>
+                            <td class="text-end" style="font-weight:700; color:var(--primary); font-size:16px;">{{ invoice.total_amount }} MAD</td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="text-end text-success">Payé</td>
-                            <td class="text-end text-success fw-bold">{{ invoice.paid_amount }} MAD</td>
+                            <td colspan="3" class="text-end" style="color:var(--success);">Paye</td>
+                            <td class="text-end" style="color:var(--success); font-weight:600;">{{ invoice.paid_amount }} MAD</td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="text-end text-danger">Reste à payer</td>
-                            <td class="text-end text-danger fw-bold">{{ invoice.remaining_amount }} MAD</td>
+                            <td colspan="3" class="text-end" style="color:var(--danger);">Reste a payer</td>
+                            <td class="text-end" style="color:var(--danger); font-weight:700;">{{ invoice.remaining_amount }} MAD</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -68,26 +84,29 @@
     </div>
 
     <div class="col-lg-4">
-        <div class="card">
-            <div class="card-header py-3" style="background:#f8fbff;">
-                <h6 class="mb-0 fw-bold" style="color:#1a5276;"><i class="fas fa-money-check me-2"></i>Historique paiements</h6>
+        <!-- Payment History -->
+        <div class="glass-card">
+            <div class="card-header">
+                <h6><i class="fas fa-money-check"></i> Historique paiements</h6>
             </div>
             <div class="card-body">
                 {% for p in payments %}
-                <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                <div class="d-flex justify-content-between align-items-center mb-3 p-3" style="background:var(--bg-glass); border-radius:12px; border:1px solid var(--border-glass);">
                     <div>
-                        <div class="fw-bold small text-success">{{ p.amount }} MAD</div>
-                        <div class="text-muted" style="font-size:11px;">{{ p.get_method_display }} — {{ p.paid_at|date:"d/m/Y" }}</div>
-                        {% if p.reference %}<div class="text-muted" style="font-size:10px;">Réf: {{ p.reference }}</div>{% endif %}
+                        <div style="color:var(--success); font-weight:600; font-size:14px;">{{ p.amount }} MAD</div>
+                        <div style="color:var(--text-muted); font-size:11px;">{{ p.get_method_display }} — {{ p.paid_at|date:"d/m/Y" }}</div>
+                        {% if p.reference %}<div style="color:var(--text-muted); font-size:10px;">Ref: {{ p.reference }}</div>{% endif %}
                     </div>
-                    <i class="fas fa-check-circle text-success"></i>
+                    <i class="fas fa-check-circle" style="color:var(--success); font-size:18px;"></i>
                 </div>
                 {% empty %}
-                <p class="text-muted small text-center py-2">Aucun paiement enregistré</p>
+                <p style="text-align:center; color:var(--text-muted); padding:20px 0; font-size:13px;">
+                    Aucun paiement enregistre
+                </p>
                 {% endfor %}
                 {% if invoice.status != 'PAID' %}
                 <a href="{% url 'billing:payment_add' invoice.pk %}" class="btn btn-success btn-sm w-100 mt-2">
-                    <i class="fas fa-plus me-1"></i>Ajouter paiement
+                    <i class="fas fa-plus"></i> Ajouter paiement
                 </a>
                 {% endif %}
             </div>

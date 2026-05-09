@@ -1,52 +1,55 @@
 {% extends 'base.html' %}
-{% block title %}{{ title }}{% endblock %}
-{% block page_title %}<i class="fas fa-calendar-plus me-2"></i>{{ title }}{% endblock %}
+{% block title %}{{ title }} — MedixCare Pro{% endblock %}
+{% block page_title %}<i class="fas fa-calendar-plus"></i> {{ title }}{% endblock %}
+
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-7">
-        <div class="card">
-            <div class="card-header py-3" style="background:linear-gradient(135deg,#117a65,#1abc9c);">
-                <h5 class="text-white mb-0"><i class="fas fa-calendar-check me-2"></i>{{ title }}</h5>
+        <div class="glass-card">
+            <div class="card-header" style="background:linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(6,182,212,0.1) 100%);">
+                <h6 style="font-size:16px;"><i class="fas fa-calendar-check" style="color:var(--success);"></i> {{ title }}</h6>
             </div>
             <div class="card-body p-4">
                 <form method="post">
                     {% csrf_token %}
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Patient <span class="text-danger">*</span></label>
+                            <label class="form-label">Patient <span style="color:var(--danger);">*</span></label>
                             {{ form.patient }}
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Médecin <span class="text-danger">*</span></label>
+                            <label class="form-label">Medecin <span style="color:var(--danger);">*</span></label>
                             {{ form.doctor }}
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Date et heure <span class="text-danger">*</span></label>
+                            <label class="form-label">Date et heure <span style="color:var(--danger);">*</span></label>
                             {{ form.date_time }}
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold small">Durée (min)</label>
+                            <label class="form-label">Duree (min)</label>
                             {{ form.duration }}
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold small">Type</label>
+                            <label class="form-label">Type</label>
                             {{ form.type }}
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold small">Statut</label>
+                            <label class="form-label">Statut</label>
                             {{ form.status }}
                         </div>
                         <div class="col-12">
-                            <label class="form-label fw-semibold small">Motif <span class="text-danger">*</span></label>
+                            <label class="form-label">Motif <span style="color:var(--danger);">*</span></label>
                             {{ form.motif }}
                         </div>
                         <div class="col-12">
-                            <label class="form-label fw-semibold small">Notes</label>
+                            <label class="form-label">Notes</label>
                             {{ form.notes }}
                         </div>
                     </div>
-                    <div class="mt-4 d-flex gap-2">
-                        <button type="submit" class="btn btn-success px-4"><i class="fas fa-save me-2"></i>Enregistrer</button>
+                    <div class="mt-4 pt-3 border-top d-flex gap-3">
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
                         <a href="{% url 'appointments:list' %}" class="btn btn-outline-secondary px-4">Annuler</a>
                     </div>
                 </form>

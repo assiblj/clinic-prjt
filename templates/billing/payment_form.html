@@ -1,161 +1,142 @@
 {% extends 'base.html' %}
-{% block title %}Paiement{% endblock %}
-{% block page_title %}<i class="fas fa-money-bill-wave me-2"></i>Enregistrer un paiement{% endblock %}
+{% block title %}Paiement — MedixCare Pro{% endblock %}
+{% block page_title %}<i class="fas fa-money-bill-wave"></i> Enregistrer un paiement{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
 <div class="col-lg-6">
 
-<div class="alert alert-info py-2 small mb-3">
+<div class="alert alert-info mb-4" style="padding:14px 18px;">
     <i class="fas fa-file-invoice me-2"></i>Facture : <strong>{{ invoice.invoice_number }}</strong> —
-    Reste : <strong class="text-danger">{{ invoice.remaining_amount }} MAD</strong>
+    Reste : <strong style="color:var(--danger);">{{ invoice.remaining_amount }} MAD</strong>
 </div>
 
-<div class="card">
-    <div class="card-header py-3" style="background:linear-gradient(135deg,#117a65,#1abc9c);">
-        <h5 class="text-white mb-0"><i class="fas fa-credit-card me-2"></i>Nouveau paiement</h5>
+<div class="glass-card">
+    <div class="card-header" style="background:linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(6,182,212,0.1) 100%);">
+        <h6 style="font-size:16px;"><i class="fas fa-credit-card" style="color:var(--success);"></i> Nouveau paiement</h6>
     </div>
     <div class="card-body p-4">
         <form method="post" id="payment-form">
             {% csrf_token %}
 
-            <!-- Montant + Mode -->
-            <div class="row g-3 mb-3">
+            <!-- Amount + Method -->
+            <div class="row g-3 mb-4">
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold small">Montant (MAD) *</label>
+                    <label class="form-label">Montant (MAD) <span style="color:var(--danger);">*</span></label>
                     {{ form.amount }}
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold small">Mode de paiement *</label>
+                    <label class="form-label">Mode de paiement <span style="color:var(--danger);">*</span></label>
                     {{ form.method }}
                 </div>
             </div>
 
-            <!-- ══ CARTE BANCAIRE ══ -->
+            <!-- Card Fields -->
             <div id="card-fields" style="display:none;">
-                <div class="card mb-3" style="border:2px solid #1abc9c; background:#f0fdf4;">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <i class="fas fa-credit-card text-success fa-lg"></i>
-                            <span class="fw-bold text-success">Informations de la carte</span>
-                            <div class="ms-auto d-flex gap-1">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Mastercard_2019_logo.svg/40px-Mastercard_2019_logo.svg.png" height="20" alt="MC">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/40px-Visa_Inc._logo.svg.png" height="20" alt="Visa">
+                <div class="p-4 mb-4" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:12px;">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-credit-card" style="color:var(--success); font-size:18px;"></i>
+                        <span style="color:var(--success); font-weight:600;">Informations de la carte</span>
+                        <div class="ms-auto d-flex gap-2">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Mastercard_2019_logo.svg/40px-Mastercard_2019_logo.svg.png" height="20" alt="MC">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/40px-Visa_Inc._logo.svg.png" height="20" alt="Visa">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.card_number.label }}</label>
+                        {{ form.card_number }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.card_holder.label }}</label>
+                        {{ form.card_holder }}
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{ form.card_expiry.label }}</label>
+                            {{ form.card_expiry }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ form.card_cvv.label }}</label>
+                            {{ form.card_cvv }}
+                        </div>
+                    </div>
+
+                    <!-- Visual Card -->
+                    <div class="mt-3 p-3" style="background:linear-gradient(135deg, var(--primary), var(--secondary)); border-radius:12px; color:white; font-family:monospace;">
+                        <div style="font-size:11px; opacity:0.7; margin-bottom:4px;">N carte</div>
+                        <div id="card-preview-number" style="font-size:16px; font-weight:600; letter-spacing:2px;">XXXX XXXX XXXX XXXX</div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <div>
+                                <div style="font-size:10px; opacity:0.7;">Titulaire</div>
+                                <div id="card-preview-holder" style="font-size:12px; font-weight:600;">VOTRE NOM</div>
                             </div>
-                        </div>
-
-                        <!-- Numéro carte -->
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">{{ form.card_number.label }}</label>
-                            {{ form.card_number }}
-                            <div id="card-type-icon" class="mt-1 small text-muted"></div>
-                        </div>
-
-                        <!-- Nom -->
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">{{ form.card_holder.label }}</label>
-                            {{ form.card_holder }}
-                        </div>
-
-                        <!-- Expiry + CVV -->
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-semibold">{{ form.card_expiry.label }}</label>
-                                {{ form.card_expiry }}
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-semibold">
-                                    {{ form.card_cvv.label }}
-                                    <i class="fas fa-question-circle text-muted ms-1"
-                                       data-bs-toggle="tooltip" title="3 chiffres au dos de la carte"></i>
-                                </label>
-                                {{ form.card_cvv }}
-                            </div>
-                        </div>
-
-                        <!-- Carte visuelle -->
-                        <div class="mt-3 p-3 rounded text-white"
-                             style="background:linear-gradient(135deg,#1a5276,#2e86c1);font-family:monospace;min-height:80px;">
-                            <div class="small opacity-75 mb-1">N° carte</div>
-                            <div id="card-preview-number" class="fs-6 fw-bold letter-spacing-2">XXXX XXXX XXXX XXXX</div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <div>
-                                    <div class="small opacity-75">Titulaire</div>
-                                    <div id="card-preview-holder" class="small fw-bold">VOTRE NOM</div>
-                                </div>
-                                <div>
-                                    <div class="small opacity-75">Expire</div>
-                                    <div id="card-preview-expiry" class="small fw-bold">MM/YY</div>
-                                </div>
+                            <div>
+                                <div style="font-size:10px; opacity:0.7;">Expire</div>
+                                <div id="card-preview-expiry" style="font-size:12px; font-weight:600;">MM/YY</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ══ CHÈQUE ══ -->
+            <!-- Cheque Fields -->
             <div id="cheque-fields" style="display:none;">
-                <div class="card mb-3" style="border:2px solid #f39c12; background:#fffbf0;">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <i class="fas fa-money-check text-warning fa-lg"></i>
-                            <span class="fw-bold text-warning">Informations du chèque</span>
+                <div class="p-4 mb-4" style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:12px;">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-money-check" style="color:var(--warning); font-size:18px;"></i>
+                        <span style="color:var(--warning); font-weight:600;">Informations du cheque</span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{ form.cheque_number.label }}</label>
+                            {{ form.cheque_number }}
                         </div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label small fw-semibold">{{ form.cheque_number.label }}</label>
-                                {{ form.cheque_number }}
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-semibold">{{ form.cheque_bank.label }}</label>
-                                {{ form.cheque_bank }}
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{ form.cheque_bank.label }}</label>
+                            {{ form.cheque_bank }}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ══ VIREMENT ══ -->
+            <!-- Transfer Fields -->
             <div id="transfer-fields" style="display:none;">
-                <div class="card mb-3" style="border:2px solid #8e44ad; background:#fdf0ff;">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <i class="fas fa-exchange-alt text-purple fa-lg" style="color:#8e44ad;"></i>
-                            <span class="fw-bold" style="color:#8e44ad;">Informations du virement</span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">{{ form.transfer_ref.label }}</label>
-                            {{ form.transfer_ref }}
-                        </div>
+                <div class="p-4 mb-4" style="background:rgba(139,92,246,0.1); border:1px solid rgba(139,92,246,0.3); border-radius:12px;">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-exchange-alt" style="color:#8b5cf6; font-size:18px;"></i>
+                        <span style="color:#8b5cf6; font-weight:600;">Informations du virement</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.transfer_ref.label }}</label>
+                        {{ form.transfer_ref }}
                     </div>
                 </div>
             </div>
 
-            <!-- ══ ASSURANCE ══ -->
+            <!-- Insurance Fields -->
             <div id="insurance-fields" style="display:none;">
-                <div class="card mb-3" style="border:2px solid #27ae60; background:#f0fdf4;">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class="fas fa-shield-alt text-success fa-lg"></i>
-                            <span class="fw-bold text-success">Prise en charge assurance</span>
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label small fw-semibold">Référence dossier assurance</label>
-                            {{ form.reference }}
-                        </div>
+                <div class="p-4 mb-4" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:12px;">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-shield-alt" style="color:var(--success); font-size:18px;"></i>
+                        <span style="color:var(--success); font-weight:600;">Prise en charge assurance</span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Reference dossier assurance</label>
+                        {{ form.reference }}
                     </div>
                 </div>
             </div>
 
             <!-- Notes -->
-            <div class="mb-3">
-                <label class="form-label fw-semibold small">Notes</label>
+            <div class="mb-4">
+                <label class="form-label">Notes</label>
                 {{ form.notes }}
             </div>
 
-            <div class="d-flex gap-2 mt-4">
+            <div class="pt-3 border-top d-flex gap-3">
                 <button type="submit" class="btn btn-success px-4">
-                    <i class="fas fa-check me-2"></i>Valider le paiement
+                    <i class="fas fa-check"></i> Valider le paiement
                 </button>
                 <a href="{% url 'billing:detail' invoice.pk %}" class="btn btn-outline-secondary px-4">Annuler</a>
             </div>
@@ -172,20 +153,17 @@
 function showPaymentFields() {
     const method = document.getElementById('payment_method').value;
 
-    // Cache tout
     document.getElementById('card-fields').style.display     = 'none';
     document.getElementById('cheque-fields').style.display   = 'none';
     document.getElementById('transfer-fields').style.display = 'none';
     document.getElementById('insurance-fields').style.display= 'none';
 
-    // Affiche selon le mode
     if (method === 'CARD')     document.getElementById('card-fields').style.display     = 'block';
     if (method === 'CHEQUE')   document.getElementById('cheque-fields').style.display   = 'block';
     if (method === 'TRANSFER') document.getElementById('transfer-fields').style.display = 'block';
     if (method === 'INSURANCE')document.getElementById('insurance-fields').style.display= 'block';
 }
 
-// Aperçu carte en temps réel
 document.getElementById('card_number')?.addEventListener('input', function() {
     let v = this.value.replace(/\D/g, '').substring(0, 16);
     this.value = v.replace(/(.{4})/g, '$1 ').trim();
@@ -205,10 +183,8 @@ document.getElementById('card_expiry')?.addEventListener('input', function() {
     document.getElementById('card-preview-expiry').textContent = this.value || 'MM/YY';
 });
 
-// Initialiser au chargement
 showPaymentFields();
 
-// Tooltips Bootstrap
 const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
 </script>

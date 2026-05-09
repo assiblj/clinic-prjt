@@ -3,99 +3,963 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Clinique Al Shifa{% endblock %}</title>
+    <title>{% block title %}MedixCare Pro{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #1a5276;
-            --secondary: #2e86c1;
-            --accent: #17a589;
-            --sidebar-width: 260px;
+            /* Premium Medical Color Palette */
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --primary-light: #38bdf8;
+            --secondary: #06b6d4;
+            --accent: #14b8a6;
+            --accent-light: #2dd4bf;
+            
+            /* Dark Theme */
+            --bg-dark: #0f172a;
+            --bg-darker: #020617;
+            --bg-card: rgba(15, 23, 42, 0.8);
+            --bg-card-hover: rgba(30, 41, 59, 0.9);
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-strong: rgba(255, 255, 255, 0.08);
+            
+            /* Text */
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            /* Borders */
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glass: rgba(255, 255, 255, 0.12);
+            
+            /* Status Colors */
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #06b6d4;
+            
+            /* Layout */
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px rgba(14, 165, 233, 0.15);
         }
-        body { background: #f0f4f8; font-family: 'Segoe UI', sans-serif; }
 
-        /* ── Sidebar ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-darker);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Gradient Orbs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-darker);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-glass);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ══════════════════════════════════════════════════════
+           SIDEBAR
+        ══════════════════════════════════════════════════════ */
         #sidebar {
             width: var(--sidebar-width);
             min-height: 100vh;
-            background: linear-gradient(180deg, var(--primary) 0%, #154360 100%);
-            position: fixed; top: 0; left: 0; z-index: 100;
-            transition: all 0.3s;
-        }
-        #sidebar .brand {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        #sidebar .brand h5 { color: #fff; font-weight: 700; margin: 0; }
-        #sidebar .brand small { color: rgba(255,255,255,0.6); font-size: 11px; }
-        #sidebar .nav-link {
-            color: rgba(255,255,255,0.75);
-            padding: 10px 20px;
-            border-radius: 8px;
-            margin: 2px 10px;
-            transition: all 0.2s;
-        }
-        #sidebar .nav-link:hover,
-        #sidebar .nav-link.active {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-        }
-        #sidebar .nav-link i { width: 22px; }
-        #sidebar .section-title {
-            color: rgba(255,255,255,0.4);
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            padding: 15px 20px 5px;
-            text-transform: uppercase;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ── Main content ── */
+        #sidebar .brand {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-glass);
+        }
+
+        #sidebar .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #sidebar .brand-icon {
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+
+        #sidebar .brand h5 {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 18px;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        #sidebar .brand small {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        #sidebar nav {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+        }
+
+        #sidebar .section-title {
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 16px 14px 8px;
+            margin-top: 8px;
+        }
+
+        #sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin: 2px 0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sidebar .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: var(--primary);
+            border-radius: 0 3px 3px 0;
+            transition: height 0.2s ease;
+        }
+
+        #sidebar .nav-link:hover {
+            background: var(--bg-glass-strong);
+            color: var(--text-primary);
+            transform: translateX(4px);
+        }
+
+        #sidebar .nav-link:hover::before {
+            height: 60%;
+        }
+
+        #sidebar .nav-link.active {
+            background: linear-gradient(90deg, rgba(14, 165, 233, 0.15) 0%, transparent 100%);
+            color: var(--primary-light);
+        }
+
+        #sidebar .nav-link.active::before {
+            height: 60%;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        #sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        /* User Profile at bottom */
+        #sidebar .user-profile {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-glass);
+        }
+
+        #sidebar .user-profile .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           MAIN CONTENT
+        ══════════════════════════════════════════════════════ */
         #main-content {
             margin-left: var(--sidebar-width);
             min-height: 100vh;
         }
 
-        /* ── Topbar ── */
+        /* ══════════════════════════════════════════════════════
+           TOPBAR
+        ══════════════════════════════════════════════════════ */
         #topbar {
-            background: #fff;
-            border-bottom: 1px solid #e0e7ef;
-            padding: 0 24px;
-            height: 60px;
+            height: var(--topbar-height);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: sticky; top: 0; z-index: 99;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 99;
         }
-        #topbar .page-title { font-weight: 600; color: var(--primary); font-size: 17px; }
 
-        /* ── Cards ── */
-        .card { border: none; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-        .card-header { border-radius: 12px 12px 0 0 !important; border-bottom: none; }
-        .stat-card { border-radius: 12px; color: #fff; padding: 20px; }
-        .stat-card .icon { font-size: 2.5rem; opacity: 0.3; }
-        .stat-card h3 { font-size: 2rem; font-weight: 700; }
+        #topbar .page-title {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-        /* ── Table ── */
-        .table-hover tbody tr:hover { background: #eaf4fb; }
-        .table thead th { background: var(--primary); color: #fff; border: none; font-weight: 500; }
+        #topbar .page-title i {
+            color: var(--primary);
+        }
 
-        /* ── Buttons ── */
-        .btn-primary { background: var(--primary); border-color: var(--primary); }
-        .btn-primary:hover { background: var(--secondary); border-color: var(--secondary); }
+        #topbar .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-        /* ── Alerts ── */
-        .alert { border-radius: 10px; border: none; }
+        /* ══════════════════════════════════════════════════════
+           GLASSMORPHISM CARDS
+        ══════════════════════════════════════════════════════ */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
 
-        /* ── Avatar ── */
+        .glass-card:hover {
+            border-color: rgba(14, 165, 233, 0.2);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .glass-card .card-header {
+            background: var(--bg-glass);
+            border-bottom: 1px solid var(--border-color);
+            padding: 18px 24px;
+        }
+
+        .glass-card .card-header h6 {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 15px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .glass-card .card-header h6 i {
+            color: var(--primary);
+        }
+
+        .glass-card .card-body {
+            padding: 24px;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           STAT CARDS
+        ══════════════════════════════════════════════════════ */
+        .stat-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--stat-color, var(--primary)) 0%, transparent 100%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--stat-color, var(--primary));
+        }
+
+        .stat-card .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: linear-gradient(135deg, rgba(var(--stat-rgb, 14, 165, 233), 0.2) 0%, rgba(var(--stat-rgb, 14, 165, 233), 0.05) 100%);
+            color: var(--stat-color, var(--primary));
+        }
+
+        .stat-card .stat-label {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .stat-value {
+            color: var(--text-primary);
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .stat-card .stat-change {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           TABLES
+        ══════════════════════════════════════════════════════ */
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .modern-table thead th {
+            background: var(--bg-glass);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .modern-table tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modern-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .modern-table tbody tr:hover {
+            background: var(--bg-glass-strong);
+        }
+
+        .modern-table tbody td {
+            padding: 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           BUTTONS
+        ══════════════════════════════════════════════════════ */
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #34d399 0%, var(--success) 100%);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #fbbf24 0%, var(--warning) 100%);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #f87171 0%, var(--danger) 100%);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline-secondary {
+            background: transparent;
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+        }
+
+        .btn-outline-secondary:hover {
+            background: var(--bg-glass-strong);
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+
+        .btn-outline-warning {
+            background: transparent;
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+
+        .btn-outline-warning:hover {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-outline-danger {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .btn-outline-danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-outline-success {
+            background: transparent;
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .btn-outline-success:hover {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-outline-info {
+            background: transparent;
+            border: 1px solid var(--info);
+            color: var(--info);
+        }
+
+        .btn-outline-info:hover {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 7px 14px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 10px;
+        }
+
+        .btn-icon.btn-sm {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           BADGES
+        ══════════════════════════════════════════════════════ */
+        .badge {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-primary, .bg-primary {
+            background: rgba(14, 165, 233, 0.15) !important;
+            color: var(--primary-light) !important;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+
+        .badge-success, .bg-success {
+            background: rgba(16, 185, 129, 0.15) !important;
+            color: #34d399 !important;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-warning, .bg-warning {
+            background: rgba(245, 158, 11, 0.15) !important;
+            color: #fbbf24 !important;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-danger, .bg-danger {
+            background: rgba(239, 68, 68, 0.15) !important;
+            color: #f87171 !important;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .badge-info, .bg-info {
+            background: rgba(6, 182, 212, 0.15) !important;
+            color: #22d3ee !important;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .badge-secondary, .bg-secondary {
+            background: rgba(100, 116, 139, 0.2) !important;
+            color: var(--text-secondary) !important;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        .badge-dark, .bg-dark {
+            background: rgba(30, 41, 59, 0.8) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--border-glass);
+        }
+
+        /* ══════════════════════════════════════════════════════
+           FORMS
+        ══════════════════════════════════════════════════════ */
+        .form-control, .form-select {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            color: var(--text-primary);
+            padding: 12px 16px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: var(--bg-glass-strong);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-label {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .input-group-text {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-right: none;
+            color: var(--text-muted);
+            border-radius: 10px 0 0 10px;
+        }
+
+        .input-group .form-control {
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           AVATAR
+        ══════════════════════════════════════════════════════ */
         .avatar {
-            width: 38px; height: 38px; border-radius: 50%;
-            background: var(--secondary);
-            color: #fff; font-weight: 700;
-            display: flex; align-items: center; justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .avatar-sm {
+            width: 32px;
+            height: 32px;
+            font-size: 12px;
+            border-radius: 8px;
+        }
+
+        .avatar-lg {
+            width: 56px;
+            height: 56px;
+            font-size: 20px;
+            border-radius: 14px;
+        }
+
+        .avatar-xl {
+            width: 80px;
+            height: 80px;
+            font-size: 28px;
+            border-radius: 18px;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           ALERTS
+        ══════════════════════════════════════════════════════ */
+        .alert {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-success {
+            border-left: 4px solid var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .alert-warning {
+            border-left: 4px solid var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .alert-danger, .alert-error {
+            border-left: 4px solid var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .alert-info {
+            border-left: 4px solid var(--info);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            opacity: 0.5;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           PAGE CONTENT
+        ══════════════════════════════════════════════════════ */
+        .page-content {
+            padding: 28px 32px;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           ANIMATIONS
+        ══════════════════════════════════════════════════════ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        /* ══════════════════════════════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════════════════════════════ */
+        @media (max-width: 992px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+
+            #sidebar.show {
+                transform: translateX(0);
+            }
+
+            #main-content {
+                margin-left: 0;
+            }
+
+            .page-content {
+                padding: 20px;
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════
+           UTILITY CLASSES
+        ══════════════════════════════════════════════════════ */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .border-gradient {
+            border: 1px solid transparent;
+            background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+                        linear-gradient(135deg, var(--primary), var(--secondary)) border-box;
+        }
+
+        .glow-primary {
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.2);
+        }
+
+        .text-primary { color: var(--primary) !important; }
+        .text-success { color: var(--success) !important; }
+        .text-warning { color: var(--warning) !important; }
+        .text-danger { color: var(--danger) !important; }
+        .text-info { color: var(--info) !important; }
+        .text-muted { color: var(--text-muted) !important; }
+        .text-secondary { color: var(--text-secondary) !important; }
+
+        /* Card override for Bootstrap */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+        }
+
+        .card-header {
+            background: var(--bg-glass);
+            border-bottom: 1px solid var(--border-color);
+            padding: 18px 24px;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .card-footer {
+            background: var(--bg-glass);
+            border-top: 1px solid var(--border-color);
+            padding: 16px 24px;
+        }
+
+        /* Table override */
+        .table {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        .table > :not(caption) > * > * {
+            background: transparent;
+            border-bottom-color: var(--border-color);
+            padding: 14px 16px;
+        }
+
+        .table thead th {
+            background: var(--bg-glass);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table tbody tr:hover {
+            background: var(--bg-glass-strong);
+        }
+
+        .table-hover > tbody > tr:hover > * {
+            background: transparent;
+        }
+
+        /* Pagination */
+        .pagination {
+            gap: 4px;
+        }
+
+        .page-link {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            padding: 8px 14px;
+        }
+
+        .page-link:hover {
+            background: var(--bg-glass-strong);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .page-item.active .page-link {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Border utilities */
+        .border-bottom {
+            border-bottom: 1px solid var(--border-color) !important;
+        }
+
+        .border-top {
+            border-top: 1px solid var(--border-color) !important;
+        }
+
+        .border {
+            border: 1px solid var(--border-glass) !important;
+        }
+
+        .rounded {
+            border-radius: 10px !important;
+        }
+
+        .rounded-circle {
+            border-radius: 50% !important;
+        }
+
+        hr {
+            border-color: var(--border-color);
+            opacity: 1;
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(14, 165, 233, 0.3);
+            color: white;
         }
     </style>
     {% block extra_css %}{% endblock %}
@@ -104,24 +968,48 @@
 <body>
 
 {% if user.is_authenticated %}
-<!-- ══ SIDEBAR ══ -->
+<!-- ══════════════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════════════ -->
 <div id="sidebar">
     <div class="brand">
-        <h5><i class="fas fa-hospital-alt me-2"></i>Clinique</h5>
-        <small>Al Shifa — Système de gestion</small>
+        <div class="brand-logo">
+            <div class="brand-icon">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <div>
+                <h5>MedixCare</h5>
+                <small>Healthcare Platform</small>
+            </div>
+        </div>
     </div>
-    <nav class="mt-3">
+    
+    <nav>
         <div class="section-title">Principal</div>
         <a href="{% url 'core:dashboard' %}" class="nav-link {% if request.resolver_match.namespace == 'core' %}active{% endif %}">
-            <i class="fas fa-tachometer-alt"></i> Tableau de bord
+            <i class="fas fa-chart-pie"></i> Tableau de bord
         </a>
 
         <div class="section-title">Patients</div>
-        <a href="{% url 'patients:list' %}" class="nav-link {% if request.resolver_match.namespace == 'patients' %}active{% endif %}">
+        <a href="{% url 'patients:list' %}" class="nav-link {% if request.resolver_match.namespace == 'patients' and request.resolver_match.url_name == 'list' %}active{% endif %}">
             <i class="fas fa-users"></i> Patients
         </a>
-        <a href="{% url 'patients:create' %}" class="nav-link">
+        <a href="{% url 'patients:create' %}" class="nav-link {% if request.resolver_match.url_name == 'create' and request.resolver_match.namespace == 'patients' %}active{% endif %}">
             <i class="fas fa-user-plus"></i> Nouveau patient
+        </a>
+
+        <div class="section-title">Medical</div>
+        <a href="{% url 'staff:doctor_list' %}" class="nav-link {% if request.resolver_match.namespace == 'staff' %}active{% endif %}">
+            <i class="fas fa-user-md"></i> Medecins
+        </a>
+        <a href="{% url 'appointments:list' %}" class="nav-link {% if request.resolver_match.namespace == 'appointments' %}active{% endif %}">
+            <i class="fas fa-calendar-check"></i> Rendez-vous
+        </a>
+        <a href="{% url 'consultations:list' %}" class="nav-link {% if request.resolver_match.namespace == 'consultations' %}active{% endif %}">
+            <i class="fas fa-stethoscope"></i> Consultations
+        </a>
+        <a href="{% url 'billing:list' %}" class="nav-link {% if request.resolver_match.namespace == 'billing' %}active{% endif %}">
+            <i class="fas fa-file-invoice-dollar"></i> Facturation
         </a>
 
         {% if user.is_admin or user.is_staff %}
@@ -134,59 +1022,48 @@
         </a>
         {% endif %}
     </nav>
-    <div class="section-title">Médical</div>
-<a href="{% url 'staff:doctor_list' %}" class="nav-link">
-    <i class="fas fa-user-md"></i> Médecins
-</a>
-<a href="{% url 'appointments:list' %}" class="nav-link">
-    <i class="fas fa-calendar-check"></i> Rendez-vous
-</a>
-<a href="{% url 'consultations:list' %}" class="nav-link">
-    <i class="fas fa-stethoscope"></i> Consultations
-</a>
-<a href="{% url 'billing:list' %}" class="nav-link">
-    <i class="fas fa-file-invoice-dollar"></i> Facturation
-</a>
 
-    <!-- User info bas de sidebar -->
-    <div style="position:absolute; bottom:0; left:0; right:0; padding:15px 20px; border-top:1px solid rgba(255,255,255,0.1);">
-        <div class="d-flex align-items-center gap-2">
+    <div class="user-profile">
+        <div class="user-info">
             <div class="avatar">{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}</div>
-            <div>
-                <div style="color:#fff; font-size:13px; font-weight:600;">{{ user.full_name }}</div>
-                <div style="color:rgba(255,255,255,0.5); font-size:11px;">{{ user.get_role_display }}</div>
+            <div style="flex:1; min-width:0;">
+                <div style="color:var(--text-primary); font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ user.full_name }}</div>
+                <div style="color:var(--text-muted); font-size:11px;">{{ user.get_role_display }}</div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ══ MAIN CONTENT ══ -->
+<!-- ══════════════════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════════════════ -->
 <div id="main-content">
     <!-- Topbar -->
     <div id="topbar">
         <span class="page-title">{% block page_title %}Dashboard{% endblock %}</span>
-        <div class="d-flex align-items-center gap-3">
-            <a href="{% url 'accounts:profile' %}" class="btn btn-sm btn-outline-secondary">
+        <div class="topbar-actions">
+            <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary btn-sm">
                 <i class="fas fa-user"></i> Mon profil
             </a>
-            <a href="{% url 'accounts:logout' %}" class="btn btn-sm btn-outline-danger">
-                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            <a href="{% url 'accounts:logout' %}" class="btn btn-outline-danger btn-sm">
+                <i class="fas fa-sign-out-alt"></i> Deconnexion
             </a>
         </div>
     </div>
 
     <!-- Messages -->
-    <div class="px-4 pt-3">
+    <div class="page-content" style="padding-bottom:0;">
         {% for message in messages %}
-        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
-            {{ message }}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show animate-fade-in" role="alert">
+            <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' or message.tags == 'danger' %}fa-exclamation-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %}"></i>
+            <span>{{ message }}</span>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
         {% endfor %}
     </div>
 
     <!-- Page content -->
-    <div class="p-4">
+    <div class="page-content animate-fade-in">
         {% block content %}{% endblock %}
     </div>
 </div>
@@ -194,41 +1071,50 @@
 {% else %}
     {% block auth_content %}{% endblock %}
 {% endif %}
+
 {% if user.is_authenticated %}
-<!-- ══ ASSISTANT IA FLOTTANT ══ -->
+<!-- ══════════════════════════════════════════════════════
+     AI ASSISTANT FLOATING
+══════════════════════════════════════════════════════ -->
 <div id="ai-bubble" onclick="toggleAI()"
-     style="position:fixed;bottom:24px;right:24px;width:54px;height:54px;
-            background:linear-gradient(135deg,#1a5276,#2e86c1);border-radius:50%;
+     style="position:fixed;bottom:24px;right:24px;width:58px;height:58px;
+            background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:16px;
             cursor:pointer;display:flex;align-items:center;justify-content:center;
-            box-shadow:0 4px 20px rgba(0,0,0,0.25);z-index:9999;transition:transform 0.2s;"
-     onmouseover="this.style.transform='scale(1.1)'"
+            box-shadow:0 8px 32px rgba(14,165,233,0.4);z-index:9999;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);"
+     onmouseover="this.style.transform='scale(1.08) translateY(-2px)'"
      onmouseout="this.style.transform='scale(1)'">
     <i class="fas fa-robot text-white fa-lg"></i>
 </div>
 
 <div id="ai-panel"
-     style="display:none;position:fixed;bottom:88px;right:24px;
-            width:370px;height:500px;background:#fff;border-radius:16px;
-            box-shadow:0 8px 40px rgba(0,0,0,0.2);z-index:9998;
+     style="display:none;position:fixed;bottom:92px;right:24px;
+            width:380px;height:520px;
+            background:var(--bg-card);
+            backdrop-filter:blur(20px);
+            border:1px solid var(--border-glass);
+            border-radius:20px;
+            box-shadow:0 20px 60px rgba(0,0,0,0.5);z-index:9998;
             flex-direction:column;overflow:hidden;">
 
     <!-- Header -->
-    <div style="background:linear-gradient(135deg,#1a5276,#2e86c1);padding:14px 18px;
+    <div style="background:linear-gradient(135deg,var(--primary),var(--secondary));padding:18px 20px;
                 display:flex;align-items:center;justify-content:space-between;">
-        <div class="d-flex align-items-center gap-2">
-            <i class="fas fa-robot text-white"></i>
+        <div class="d-flex align-items-center gap-3">
+            <div style="width:40px;height:40px;background:rgba(255,255,255,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-robot text-white"></i>
+            </div>
             <div>
-                <div style="color:#fff;font-weight:600;font-size:14px;">Assistant IA</div>
-                <div style="color:rgba(255,255,255,0.6);font-size:11px;">Clinique Al Shifa</div>
+                <div style="color:#fff;font-weight:600;font-size:15px;">Assistant IA</div>
+                <div style="color:rgba(255,255,255,0.7);font-size:11px;">MedixCare Pro</div>
             </div>
         </div>
         <div class="d-flex gap-2">
             <button onclick="clearChat()" class="btn btn-sm"
-                    style="background:rgba(255,255,255,0.15);color:#fff;border:none;padding:3px 8px;font-size:11px;">
+                    style="background:rgba(255,255,255,0.15);color:#fff;border:none;padding:6px 10px;border-radius:8px;">
                 <i class="fas fa-trash-alt"></i>
             </button>
             <button onclick="toggleAI()" class="btn btn-sm"
-                    style="background:rgba(255,255,255,0.15);color:#fff;border:none;padding:3px 8px;">
+                    style="background:rgba(255,255,255,0.15);color:#fff;border:none;padding:6px 10px;border-radius:8px;">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -236,33 +1122,35 @@
 
     <!-- Messages -->
     <div id="ai-messages"
-         style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:#f8fbff;">
+         style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--bg-darker);">
         <div class="ai-msg-bot">
-            <div style="background:#fff;border:1px solid #e0e7ef;border-radius:12px;
-                        padding:10px 14px;font-size:13px;max-width:85%;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
-                👋 Bonjour <strong>{{ user.first_name }}</strong> !<br>
+            <div style="background:var(--bg-card);border:1px solid var(--border-glass);border-radius:14px;
+                        padding:14px 16px;font-size:13px;max-width:90%;color:var(--text-secondary);">
+                Bonjour <strong style="color:var(--primary-light);">{{ user.first_name }}</strong> !<br><br>
                 Je suis votre assistant IA. Je peux vous aider avec :<br>
-                • Questions médicales générales<br>
-                • Utilisation du système<br>
-                • Procédures administratives
+                <span style="color:var(--text-muted);">
+                    - Questions medicales generales<br>
+                    - Utilisation du systeme<br>
+                    - Procedures administratives
+                </span>
             </div>
         </div>
     </div>
 
     <!-- Input -->
-    <div style="padding:12px;background:#fff;border-top:1px solid #e0e7ef;">
+    <div style="padding:16px;background:var(--bg-card);border-top:1px solid var(--border-color);">
         <div class="d-flex gap-2">
-            <input type="text" id="ai-input" class="form-control form-control-sm"
+            <input type="text" id="ai-input" class="form-control"
                    placeholder="Posez votre question..."
                    onkeydown="if(event.key==='Enter')sendAIMessage()"
-                   style="border-radius:20px;font-size:13px;">
-            <button onclick="sendAIMessage()" class="btn btn-primary btn-sm"
-                    style="border-radius:20px;padding:5px 14px;">
+                   style="border-radius:12px;font-size:13px;padding:12px 16px;">
+            <button onclick="sendAIMessage()" class="btn btn-primary"
+                    style="border-radius:12px;padding:12px 18px;">
                 <i class="fas fa-paper-plane"></i>
             </button>
         </div>
-        <div style="font-size:10px;color:#aaa;text-align:center;margin-top:6px;">
-            ⚠️ Pas un substitut à l'avis médical professionnel
+        <div style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:8px;">
+            Pas un substitut a l&apos;avis medical professionnel
         </div>
     </div>
 </div>
@@ -270,19 +1158,19 @@
 <style>
 .ai-msg-user { display:flex; justify-content:flex-end; }
 .ai-msg-user > div {
-    background:linear-gradient(135deg,#1a5276,#2e86c1);
-    color:#fff; border-radius:12px; padding:10px 14px;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:#fff; border-radius:14px; padding:14px 16px;
     font-size:13px; max-width:85%;
 }
 .ai-msg-bot { display:flex; justify-content:flex-start; }
-.ai-typing { display:flex; align-items:center; gap:4px; padding:10px 14px; }
+.ai-typing { display:flex; align-items:center; gap:5px; padding:14px 16px; }
 .ai-typing span {
-    width:7px; height:7px; background:#aaa; border-radius:50%;
+    width:8px; height:8px; background:var(--primary); border-radius:50%;
     animation: bounce 1s infinite;
 }
 .ai-typing span:nth-child(2) { animation-delay:.15s; }
 .ai-typing span:nth-child(3) { animation-delay:.3s; }
-@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
 </style>
 
 <script>
@@ -300,9 +1188,9 @@ function clearChat() {
     aiHistory = [];
     document.getElementById('ai-messages').innerHTML = `
     <div class="ai-msg-bot">
-        <div style="background:#fff;border:1px solid #e0e7ef;border-radius:12px;
-                    padding:10px 14px;font-size:13px;max-width:85%;">
-            Chat réinitialisé. Comment puis-je vous aider ?
+        <div style="background:var(--bg-card);border:1px solid var(--border-glass);border-radius:14px;
+                    padding:14px 16px;font-size:13px;max-width:90%;color:var(--text-secondary);">
+            Chat reinitialise. Comment puis-je vous aider ?
         </div>
     </div>`;
 }
@@ -320,7 +1208,7 @@ function showTyping() {
     const box = document.getElementById('ai-messages');
     const div = document.createElement('div');
     div.className = 'ai-msg-bot'; div.id = 'ai-typing';
-    div.innerHTML = `<div style="background:#fff;border:1px solid #e0e7ef;border-radius:12px;">
+    div.innerHTML = `<div style="background:var(--bg-card);border:1px solid var(--border-glass);border-radius:14px;">
         <div class="ai-typing"><span></span><span></span><span></span></div></div>`;
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
@@ -347,11 +1235,11 @@ async function sendAIMessage() {
         });
         const data = await resp.json();
         document.getElementById('ai-typing')?.remove();
-        appendMsg('bot', data.reply || 'Erreur de réponse');
+        appendMsg('bot', data.reply || 'Erreur de reponse');
         aiHistory.push({ role: 'assistant', content: data.reply });
     } catch(e) {
         document.getElementById('ai-typing')?.remove();
-        appendMsg('bot', '❌ Erreur de connexion à l\'API.');
+        appendMsg('bot', 'Erreur de connexion a l\'API.');
     }
 }
 </script>

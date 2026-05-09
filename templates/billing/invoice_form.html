@@ -1,28 +1,50 @@
 {% extends 'base.html' %}
-{% block title %}{{ title }}{% endblock %}
-{% block page_title %}<i class="fas fa-file-invoice me-2"></i>{{ title }}{% endblock %}
+{% block title %}{{ title }} — MedixCare Pro{% endblock %}
+{% block page_title %}<i class="fas fa-file-invoice"></i> {{ title }}{% endblock %}
+
 {% block content %}
-<div class="card">
-    <div class="card-header py-3" style="background:linear-gradient(135deg,#78281f,#e74c3c);">
-        <h5 class="text-white mb-0"><i class="fas fa-file-invoice-dollar me-2"></i>{{ title }}</h5>
+<div class="glass-card">
+    <div class="card-header" style="background:linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(245,158,11,0.1) 100%);">
+        <h6 style="font-size:16px;"><i class="fas fa-file-invoice-dollar" style="color:var(--danger);"></i> {{ title }}</h6>
     </div>
     <div class="card-body p-4">
         <form method="post">
             {% csrf_token %}
-            <h6 class="fw-bold mb-3 pb-2 border-bottom" style="color:#1a5276;"><i class="fas fa-user me-2"></i>Patient</h6>
+            
+            <div style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:10px;">
+                <i class="fas fa-user"></i> Patient
+            </div>
             <div class="row g-3 mb-4">
-                <div class="col-md-6"><label class="form-label fw-semibold small">Patient *</label>{{ form.patient }}</div>
-                <div class="col-md-6"><label class="form-label fw-semibold small">Consultation liée</label>{{ form.consultation }}</div>
-                <div class="col-md-6"><label class="form-label fw-semibold small">Date échéance</label>{{ form.due_date }}</div>
-                <div class="col-md-6"><label class="form-label fw-semibold small">Notes</label>{{ form.notes }}</div>
+                <div class="col-md-6">
+                    <label class="form-label">Patient <span style="color:var(--danger);">*</span></label>
+                    {{ form.patient }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Consultation liee</label>
+                    {{ form.consultation }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Date echeance</label>
+                    {{ form.due_date }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Notes</label>
+                    {{ form.notes }}
+                </div>
             </div>
 
-            <h6 class="fw-bold mb-3 pb-2 border-bottom" style="color:#1a5276;"><i class="fas fa-list me-2"></i>Lignes de facture</h6>
+            <div style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:10px;">
+                <i class="fas fa-list"></i> Lignes de facture
+            </div>
             {{ formset.management_form }}
             <div class="table-responsive mb-4">
-                <table class="table table-bordered">
-                    <thead class="table-danger">
-                        <tr><th>Description</th><th style="width:100px;">Quantité</th><th style="width:150px;">Prix unitaire (MAD)</th></tr>
+                <table class="modern-table" style="border:1px solid var(--border-glass); border-radius:12px; overflow:hidden;">
+                    <thead>
+                        <tr style="background:rgba(239,68,68,0.1);">
+                            <th style="color:var(--danger);">Description</th>
+                            <th style="width:100px; color:var(--danger);">Quantite</th>
+                            <th style="width:150px; color:var(--danger);">Prix unitaire (MAD)</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {% for f in formset %}
@@ -35,8 +57,11 @@
                     </tbody>
                 </table>
             </div>
-            <div class="d-flex gap-2 mt-4 pt-3 border-top">
-                <button type="submit" class="btn btn-danger px-5"><i class="fas fa-save me-2"></i>Créer la facture</button>
+            
+            <div class="d-flex gap-3 mt-4 pt-4 border-top">
+                <button type="submit" class="btn btn-danger px-5">
+                    <i class="fas fa-save"></i> Creer la facture
+                </button>
                 <a href="{% url 'billing:list' %}" class="btn btn-outline-secondary px-4">Annuler</a>
             </div>
         </form>
