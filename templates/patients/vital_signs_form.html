@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Constantes vitales — {{ patient.full_name }}{% endblock %}
+{% block page_title %}<i class="fas fa-heartbeat me-2"></i>Constantes Vitales{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="alert alert-info py-2 small mb-3">
+            <i class="fas fa-user me-2"></i>Patient : <strong>{{ patient.full_name }}</strong>
+            ({{ patient.file_number }})
+        </div>
+        <div class="card">
+            <div class="card-header py-3" style="background:linear-gradient(135deg,#78281f,#e74c3c);">
+                <h5 class="text-white mb-0">
+                    <i class="fas fa-heartbeat me-2"></i>Enregistrer les constantes vitales
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold small">
+                                <i class="fas fa-weight me-1 text-primary"></i>Poids (kg)
+                            </label>
+                            {{ form.weight }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold small">
+                                <i class="fas fa-ruler-vertical me-1 text-success"></i>Taille (cm)
+                            </label>
+                            {{ form.height }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold small">
+                                <i class="fas fa-thermometer-half me-1 text-danger"></i>Température (°C)
+                            </label>
+                            {{ form.temperature }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold small">Tension systolique</label>
+                            {{ form.blood_pressure_sys }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold small">Tension diastolique</label>
+                            {{ form.blood_pressure_dia }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold small">
+                                <i class="fas fa-heart me-1 text-danger"></i>Fréq. cardiaque (bpm)
+                            </label>
+                            {{ form.heart_rate }}
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="fas fa-save me-2"></i>Enregistrer
+                        </button>
+                        <a href="{% url 'patients:detail' patient.pk %}"
+                           class="btn btn-outline-secondary px-4">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

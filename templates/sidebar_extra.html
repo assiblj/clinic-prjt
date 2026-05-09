@@ -1,0 +1,13 @@
+        <div class="section-title">Médical</div>
+        <a href="{% url 'staff:doctor_list' %}" class="nav-link {% if request.resolver_match.namespace == 'staff' %}active{% endif %}">
+            <i class="fas fa-user-md"></i> Médecins
+        </a>
+        <a href="{% url 'appointments:list' %}" class="nav-link {% if request.resolver_match.namespace == 'appointments' %}active{% endif %}">
+            <i class="fas fa-calendar-check"></i> Rendez-vous
+        </a>
+        <a href="{% url 'consultations:list' %}" class="nav-link {% if request.resolver_match.namespace == 'consultations' %}active{% endif %}">
+            <i class="fas fa-stethoscope"></i> Consultations
+        </a>
+        <a href="{% url 'billing:list' %}" class="nav-link {% if request.resolver_match.namespace == 'billing' %}active{% endif %}">
+            <i class="fas fa-file-invoice-dollar"></i> Facturation
+        </a>

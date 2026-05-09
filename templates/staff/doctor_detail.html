@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}{{ doctor.full_name }}{% endblock %}
+{% block page_title %}<i class="fas fa-user-md me-2"></i>Fiche Médecin{% endblock %}
+{% block content %}
+<div class="card mb-4" style="border-left:5px solid #1a5276;">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <div class="avatar" style="width:70px;height:70px;font-size:24px;background:linear-gradient(135deg,#1a5276,#2e86c1);">
+                    {{ doctor.user.first_name|first|upper }}{{ doctor.user.last_name|first|upper }}
+                </div>
+                <div>
+                    <h4 class="mb-1 fw-bold">{{ doctor.full_name }}</h4>
+                    <span class="badge bg-primary fs-6">{{ doctor.specialty }}</span>
+                    <span class="badge bg-success ms-1">{{ doctor.consultation_fee }} MAD / consultation</span>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'staff:doctor_edit' doctor.pk %}" class="btn btn-warning">
+                    <i class="fas fa-edit me-1"></i>Modifier
+                </a>
+                <a href="{% url 'staff:schedule_add' doctor.pk %}" class="btn btn-success">
+                    <i class="fas fa-calendar-plus me-1"></i>Planning
+                </a>
+                <a href="{% url 'staff:doctor_list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Retour
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header py-3" style="background:#f8fbff;">
+                <h6 class="mb-0 fw-bold" style="color:#1a5276;"><i class="fas fa-info-circle me-2"></i>Informations</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-borderless mb-0">
+                    <tr><td class="text-muted fw-semibold" style="width:40%">Email</td><td>{{ doctor.user.email|default:"—" }}</td></tr>
+                    <tr><td class="text-muted fw-semibold">Téléphone</td><td>{{ doctor.user.phone|default:"—" }}</td></tr>
+                    <tr><td class="text-muted fw-semibold">N° RPPS</td><td>{{ doctor.rpps_number|default:"—" }}</td></tr>
+                    <tr><td class="text-muted fw-semibold">Bureau</td><td>{{ doctor.office_number|default:"—" }}</td></tr>
+                    <tr><td class="text-muted fw-semibold">Biographie</td><td>{{ doctor.bio|default:"—" }}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header py-3" style="background:#f8fbff;">
+                <h6 class="mb-0 fw-bold" style="color:#1a5276;"><i class="fas fa-calendar-alt me-2"></i>Planning hebdomadaire</h6>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead><tr><th>Jour</th><th>Début</th><th>Fin</th><th>Créneau</th></tr></thead>
+                    <tbody>
+                        {% for s in schedules %}
+                        <tr>
+                            <td class="fw-semibold">{{ s.get_day_of_week_display }}</td>
+                            <td>{{ s.start_time }}</td>
+                            <td>{{ s.end_time }}</td>
+                            <td><span class="badge bg-info">{{ s.slot_duration }} min</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted py-3">Aucun planning défini</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header py-3" style="background:#f8fbff;">
+                <h6 class="mb-0 fw-bold" style="color:#1a5276;"><i class="fas fa-plane-departure me-2"></i>Congés récents</h6>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead><tr><th>Du</th><th>Au</th><th>Motif</th></tr></thead>
+                    <tbody>
+                        {% for l in leaves %}
+                        <tr>
+                            <td>{{ l.start_date|date:"d/m/Y" }}</td>
+                            <td>{{ l.end_date|date:"d/m/Y" }}</td>
+                            <td>{{ l.reason|default:"—" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="3" class="text-center text-muted py-3">Aucun congé enregistré</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

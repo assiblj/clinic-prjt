@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Mon Profil{% endblock %}
+{% block page_title %}<i class="fas fa-user me-2"></i>Mon Profil{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header py-3" style="background:linear-gradient(135deg,#1a5276,#2e86c1);">
+                <h5 class="text-white mb-0"><i class="fas fa-user-edit me-2"></i>Modifier mon profil</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Prénom</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Nom</label>
+                            {{ form.last_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Email</label>
+                            {{ form.email }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Téléphone</label>
+                            {{ form.phone }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold small">Photo de profil</label>
+                            {{ form.photo }}
+                            {% if request.user.photo %}
+                            <div class="mt-2">
+                                <img src="{{ request.user.photo.url }}" width="60" class="rounded-circle">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-save me-2"></i>Enregistrer
+                        </button>
+                        <a href="{% url 'core:dashboard' %}" class="btn btn-outline-secondary px-4">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

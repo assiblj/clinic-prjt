@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}<i class="fas fa-calendar-plus me-2"></i>{{ title }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header py-3" style="background:linear-gradient(135deg,#117a65,#1abc9c);">
+                <h5 class="text-white mb-0"><i class="fas fa-calendar-check me-2"></i>{{ title }}</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Patient <span class="text-danger">*</span></label>
+                            {{ form.patient }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Médecin <span class="text-danger">*</span></label>
+                            {{ form.doctor }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Date et heure <span class="text-danger">*</span></label>
+                            {{ form.date_time }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold small">Durée (min)</label>
+                            {{ form.duration }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold small">Type</label>
+                            {{ form.type }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Statut</label>
+                            {{ form.status }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold small">Motif <span class="text-danger">*</span></label>
+                            {{ form.motif }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold small">Notes</label>
+                            {{ form.notes }}
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-success px-4"><i class="fas fa-save me-2"></i>Enregistrer</button>
+                        <a href="{% url 'appointments:list' %}" class="btn btn-outline-secondary px-4">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

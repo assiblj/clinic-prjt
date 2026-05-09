@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Ordonnance{% endblock %}
+{% block page_title %}<i class="fas fa-prescription me-2"></i>Ordonnance{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="alert alert-info py-2 small mb-3">
+            <i class="fas fa-user me-2"></i>Patient : <strong>{{ consultation.patient.full_name }}</strong> —
+            Consultation du {{ consultation.date|date:"d/m/Y" }}
+        </div>
+        <div class="card">
+            <div class="card-header py-3" style="background:linear-gradient(135deg,#117a65,#1abc9c);">
+                <h5 class="text-white mb-0"><i class="fas fa-prescription me-2"></i>Médicaments prescrits</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ formset.management_form }}
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Médicament</th>
+                                    <th>Dosage</th>
+                                    <th>Fréquence</th>
+                                    <th>Durée</th>
+                                    <th>Instructions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for f in formset %}
+                                <tr>
+                                    <td>{{ f.medication_name }}</td>
+                                    <td>{{ f.dosage }}</td>
+                                    <td>{{ f.frequency }}</td>
+                                    <td>{{ f.duration }}</td>
+                                    <td>{{ f.instructions }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-success px-4"><i class="fas fa-save me-2"></i>Enregistrer l'ordonnance</button>
+                        <a href="{% url 'consultations:detail' consultation.pk %}" class="btn btn-outline-secondary px-4">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

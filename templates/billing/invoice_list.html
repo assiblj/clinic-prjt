@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Facturation{% endblock %}
+{% block page_title %}<i class="fas fa-file-invoice-dollar me-2"></i>Facturation{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0 text-muted">{{ invoices.count }} facture(s)</h5>
+    <a href="{% url 'billing:create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Nouvelle facture
+    </a>
+</div>
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr><th>N° Facture</th><th>Patient</th><th>Total</th><th>Payé</th><th>Reste</th><th>Statut</th><th>Date</th><th class="text-center">Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for inv in invoices %}
+                <tr>
+                    <td><span class="badge bg-dark">{{ inv.invoice_number }}</span></td>
+                    <td>
+                        <div class="fw-semibold small">{{ inv.patient.full_name }}</div>
+                        <div class="text-muted" style="font-size:11px;">{{ inv.patient.file_number }}</div>
+                    </td>
+                    <td class="fw-bold text-primary">{{ inv.total_amount }} MAD</td>
+                    <td class="text-success">{{ inv.paid_amount }} MAD</td>
+                    <td class="{% if inv.remaining_amount > 0 %}text-danger fw-bold{% else %}text-success{% endif %}">
+                        {{ inv.remaining_amount }} MAD
+                    </td>
+                    <td>
+                        {% if inv.status == 'PAID' %}<span class="badge bg-success">Payée</span>
+                        {% elif inv.status == 'PARTIAL' %}<span class="badge bg-warning text-dark">Partielle</span>
+                        {% elif inv.status == 'PENDING' %}<span class="badge bg-danger">En attente</span>
+                        {% else %}<span class="badge bg-secondary">{{ inv.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="small text-muted">{{ inv.created_at|date:"d/m/Y" }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'billing:detail' inv.pk %}" class="btn btn-sm btn-outline-primary me-1">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        {% if inv.status != 'PAID' %}
+                        <a href="{% url 'billing:payment_add' inv.pk %}" class="btn btn-sm btn-outline-success">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8" class="text-center text-muted py-4">Aucune facture enregistrée</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

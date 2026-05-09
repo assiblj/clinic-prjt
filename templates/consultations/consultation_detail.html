@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %}Consultation — {{ consultation.patient.full_name }}{% endblock %}
+{% block page_title %}<i class="fas fa-stethoscope me-2"></i>Détail Consultation{% endblock %}
+{% block content %}
+<div class="card mb-4" style="border-left:5px solid #1a5276;">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="fw-bold mb-1">{{ consultation.patient.full_name }}</h5>
+                <span class="badge bg-primary">{{ consultation.patient.file_number }}</span>
+                <span class="badge bg-secondary ms-1">{{ consultation.date|date:"d/m/Y H:i" }}</span>
+                <span class="badge bg-info ms-1">{{ consultation.doctor.full_name }}</span>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'consultations:prescription_add' consultation.pk %}" class="btn btn-success btn-sm">
+                    <i class="fas fa-prescription me-1"></i>Ordonnance
+                </a>
+                <a href="{% url 'consultations:lab_add' consultation.pk %}" class="btn btn-info btn-sm">
+                    <i class="fas fa-flask me-1"></i>Examen
+                </a>
+                <a href="{% url 'consultations:list' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i>Retour
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header py-3" style="background:#f8fbff;">
+                <h6 class="mb-0 fw-bold" style="color:#1a5276;"><i class="fas fa-notes-medical me-2"></i>Compte-rendu médical</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="fw-semibold small text-primary mb-1">Motif</div>
+                    <p class="small mb-0">{{ consultation.motif }}</p>
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <div class="fw-semibold small text-info mb-1">Examen clinique</div>
+                    <p class="small mb-0">{{ consultation.clinical_exam|default:"Non renseigné"|linebreaksbr }}</p>
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <div class="fw-semibold small text-danger mb-1">Diagnostic</div>
+                    <p class="small mb-0">{{ consultation.diagnosis|linebreaksbr }}</p>
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <div class="fw-semibold small text-success mb-1">Traitement prescrit</div>
+                    <p class="small mb-0">{{ consultation.treatment|default:"Aucun"|linebreaksbr }}</p>
+                </div>
+                {% if consultation.notes %}
+                <hr>
+                <div>
+                    <div class="fw-semibold small text-muted mb-1">Notes</div>
+                    <p class="small mb-0">{{ consultation.notes }}</p>
+                </div>
+                {% endif %}
+                {% if consultation.follow_up_date %}
+                <hr>
+                <div class="alert alert-warning py-2 mb-0 small">
+                    <i class="fas fa-calendar-check me-1"></i>
+                    Suivi prévu le : <strong>{{ consultation.follow_up_date|date:"d/m/Y" }}</strong>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Ordonnance -->
+        {% if prescription %}
+        <div class="card mb-4">
+            <div class="card-header py-3" style="background:linear-gradient(135deg,#117a65,#1abc9c);">
+                <h6 class="text-white mb-0"><i class="fas fa-prescription me-2"></i>Ordonnance</h6>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead><tr><th>Médicament</th><th>Dosage</th><th>Fréquence</th><th>Durée</th></tr></thead>
+                    <tbody>
+                        {% for item in prescription.items.all %}
+                        <tr>
+                            <td class="fw-semibold small">{{ item.medication_name }}</td>
+                            <td class="small">{{ item.dosage }}</td>
+                            <td class="small">{{ item.frequency }}</td>
+                            <td class="small">{{ item.duration }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Examens -->
+        <div class="card">
+            <div class="card-header py-3" style="background:#f8fbff;">
+                <h6 class="mb-0 fw-bold" style="color:#1a5276;"><i class="fas fa-flask me-2"></i>Examens demandés</h6>
+            </div>
+            <div class="card-body">
+                {% for lab in lab_requests %}
+                <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                    <div>
+                        <div class="fw-semibold small">{{ lab.get_type_display }}</div>
+                        <div class="text-muted" style="font-size:11px;">{{ lab.description|truncatechars:40 }}</div>
+                    </div>
+                    {% if lab.status == 'PENDING' %}<span class="badge bg-warning text-dark">En attente</span>
+                    {% elif lab.status == 'DONE' %}<span class="badge bg-success">Réalisé</span>
+                    {% else %}<span class="badge bg-danger">Annulé</span>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <p class="text-muted small text-center py-2">Aucun examen demandé</p>
+                {% endfor %}
+                <a href="{% url 'consultations:lab_add' consultation.pk %}" class="btn btn-outline-info btn-sm w-100 mt-2">
+                    <i class="fas fa-plus me-1"></i>Ajouter examen
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
